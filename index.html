@@ -110,53 +110,61 @@
 
   <script>
     const rawTracks = [
-      { "name": "May We And God Be One Soprano.mp3", "id": "0B4FfhlON_DBeVjFmbWRuVVBmckE" },
-      { "name": "We Wait For Thee -soprano.mp3", "id": "0B4FfhlON_DBeRzl3aHdhZWFfYWM" },
-      { "name": "We Wait For Thee Alto.mp3", "id": "0B4FfhlON_DBeNGh5WTZzX3FYbUE" },
-      { "name": "We Wait For Thee Tenor.mp3", "id": "0B4FfhlON_DBeNU56Q1IxdUx6eGM" },
-      { "name": "How Beautiful-bass.mp3", "id": "0B4FfhlON_DBednhIQnpFUDE3aUE" },
-      { "name": "With A Voice Of Singing-bass.mp3", "id": "0B4FfhlON_DBebl83Rnd0VzlyWm8" },
-      { "name": "With A Voice Of Singing-soprano.mp3", "id": "0B4FfhlON_DBea2lES2xTTUlZTHM" },
-      { "name": "With A Voice Of Singing-alto.mp3", "id": "0B4FfhlON_DBeVlFQUjBZa0JTQlU" },
-      { "name": "With A Voice Of Singing-tenor.mp3", "id": "0B4FfhlON_DBeOVJxUmFlbjJFdk0" },
-      { "name": "Candlelight carol Soprano.mp3", "id": "0B4FfhlON_DBeSlJ4NDFKNnRWOGM" },
-      { "name": "I Have Decided to Follow Jesus- (Instrumental).mp3", "id": "1L-XjZOMp-czujgJUBVGEuDHX8F-z7Ws" },
-      { "name": "For God So Loved Tenor.mp3", "id": "0B4FfhlON_DBeMTc0QjlqbThmNEk" },
-      { "name": "Restless Is The Heart-tenor.mp3", "id": "0B4FfhlON_DBeYkFZa2JSa3oxT2c" },
-      { "name": "For God so Loved Soprano.mp3", "id": "0B4FfhlON_DBeekFwaFF6ZmpxelRnZjZZZF85LUdNLWQ0MG5N" },
-      { "name": "For God So Loved Bass.mp3", "id": "0B4FfhlON_DBeZ1AwMmZNVktmV3c" },
-      { "name": "Restless Is The Heart-Alto.mp3", "id": "0B4FfhlON_DBeUkc2cGZYbjhnaFU" },
-      { "name": "Restless Is The Heart-bass.mp3", "id": "0B4FfhlON_DBeQ216RE10RkpESVU" },
-      { "name": "Restless Is The Heart -soprano.mp3", "id": "0B4FfhlON_DBeOTdDTFozcHZ2NWM" },
-      { "name": "For God so Loved Alto.mp3", "id": "0B4FfhlON_DBeM0dISnl1WV9EamR2bENUV2ExcW5TNG5OcmtN" },
-      { "name": "Gather The People.mp3", "id": "1yyKgDRa2FuhMhLFJErag2cDK4deDhm1v" },
-      { "name": "Blest Be The Lord.mp3", "id": "1PdfxH3E09NcaYbG3gLwjgXV1Z6uoR14r" },
-      { "name": "You Alone.mp3", "id": "1jwosbtfnUzJWPcKLkYPUOOt8hz4rb0rC" },
-      { "name": "Rain Down.mp3", "id": "1TXkAYX8_UyYyTvZlAPM10Im7tZKjak3B" },
-      { "name": "The First Nowell.mp3", "id": "0B4FfhlON_DBeTlFpbC1MUWZBLVBVN0c2OEVGcWxyNDI0NDF3" },
-      { "name": "Tenor BASS GABRIEL.mp3", "id": "1RlUOp2KFo96ZjiS7zbtdcSX9s8Sxmo42" },
-      { "name": "We Three Kings.mp3", "id": "1sQEbot5xVtKmZLFEVQK9-RIhyo870bNR" },
-      { "name": "One bread  One Body.mp3", "id": "0B4FfhlON_DBeT3h4N0FPUWQyYzA" },
-      { "name": "How Beautiful alto.mp3", "id": "0B4FfhlON_DBeWlhGS0pWcmZPTHM" },
-      { "name": "And Can It Be -Alto.mp3", "id": "0B4FfhlON_DBeWU1xamhQR2dZN2c" },
-      { "name": "Arise my Soul-alto.mp3", "id": "0B4FfhlON_DBeS3FyRDF0NXQtZHM" },
-      { "name": "Arise My Soul Arise-soprano.mp3", "id": "0B4FfhlON_DBeUkhCa2xuajM5UGs" },
-      { "name": "And Can It Be-soprano.mp3", "id": "0B4FfhlON_DBeOG14WHV0bmUweTQ" },
-      { "name": "Arise My Soul Arise-tenor.mp3", "id": "0B4FfhlON_DBeanpoWGR2dkducVk" },
-      { "name": "And Can It Be -tenor.mp3", "id": "0B4FfhlON_DBeN0w4VmxwWXFsM0E" },
-      { "name": "How Beautiful - soprano.mp3", "id": "0B4FfhlON_DBeRDc4RDVWZ2tDZFk" },
-      { "name": "How Beautiful Tenor.mp3", "id": "0B4FfhlON_DBeVWNSVHJrTEQ3VTg" },
-      { "name": "O Holy Night Bass 2nd.mp3", "id": "0B4FfhlON_DBed3BfNWNXYVc1QmM" },
-      { "name": "O Holy Night Tenor 2nd.mp3", "id": "0B4FfhlON_DBebklpUGR3SUh4Tk0" },
-      { "name": "O Holy Night Sop2.mp3", "id": "0B4FfhlON_DBecjY1ZUJqTDNqSk0" },
-      { "name": "O Holy Night Soprano 1.mp3", "id": "0B4FfhlON_DBeb3JsTTREYWY2QVU" },
-      { "name": "O Holy Night Alto 2nd.mp3", "id": "0B4FfhlON_DBeV2dhYU14YkVfY0E" },
-      { "name": "Be Thou Thy Vision 1.mp3", "id": "0B4FfhlON_DBeNlR2ZU1NS3EtVzA" },
-      { "name": "Celtic Song Of Farewell.mp3", "id": "0B4FfhlON_DBeNUY5dnBXYjZQWFU" }
+      "African Alleluia.mp3",
+      "Al ShloSha.mp3",
+      "And Can It Be -Alto.mp3",
+      "And Can It Be -tenor.mp3",
+      "And Can It Be-soprano.mp3",
+      "Angels Carol Alto.mp3",
+      "Angels Carol Soprano.mp3",
+      "Angels We Have Heard On High.mp3",
+      "Arise My Soul Arise-soprano.mp3",
+      "Arise My Soul Arise-tenor.mp3",
+      "Arise my Soul-alto.mp3",
+      "At the foot alto.mp3",
+      "At the foot bass.mp3",
+      "At the foot soprano.mp3",
+      "Be Thou Thy Vision 1.mp3",
+      "Blest Be The Lord.mp3",
+      "Candlelight carol Soprano.mp3",
+      "Celtic Song Of Farewell.mp3",
+      "For God So Loved Bass.mp3",
+      "For God So Loved Tenor.mp3",
+      "For God so Loved Alto.mp3",
+      "For God so Loved Soprano.mp3",
+      "Gather The People.mp3",
+      "How Beautiful - soprano.mp3",
+      "How Beautiful Tenor.mp3",
+      "How Beautiful alto.mp3",
+      "How Beautiful-bass.mp3",
+      "I Have Decided to Follow Jesus- (Instrumental).mp3",
+      "May We And God Be One Soprano.mp3",
+      "O Holy Night Alto 2nd.mp3",
+      "O Holy Night Bass 2nd.mp3",
+      "O Holy Night Sop2.mp3",
+      "O Holy Night Soprano 1.mp3",
+      "O Holy Night Tenor 2nd.mp3",
+      "One bread  One Body.mp3",
+      "Rain Down.mp3",
+      "Restless Is The Heart -soprano.mp3",
+      "Restless Is The Heart-Alto.mp3",
+      "Restless Is The Heart-bass.mp3",
+      "Restless Is The Heart-tenor.mp3",
+      "Tenor BASS GABRIEL.mp3",
+      "The First Nowell.mp3",
+      "We Three Kings.mp3",
+      "We Wait For Thee -soprano.mp3",
+      "We Wait For Thee Alto.mp3",
+      "We Wait For Thee Tenor.mp3",
+      "With A Voice Of Singing-alto.mp3",
+      "With A Voice Of Singing-bass.mp3",
+      "With A Voice Of Singing-soprano.mp3",
+      "With A Voice Of Singing-tenor.mp3",
+      "You Alone.mp3"
     ];
 
-    function getCategory(name) {
-      const lower = name.toLowerCase();
+    function getCategory(filename) {
+      const lower = filename.toLowerCase();
       if (lower.includes('soprano') || lower.includes('sop2')) return 'soprano';
       if (lower.includes('alto')) return 'alto';
       if (lower.includes('tenor')) return 'tenor';
@@ -168,9 +176,9 @@
       const container = document.getElementById('track-list');
       container.innerHTML = '';
 
-      rawTracks.forEach(track => {
-        const category = getCategory(track.name);
-        const cleanName = track.name.replace(/\.mp3$/i, '');
+      rawTracks.forEach(filename => {
+        const category = getCategory(filename);
+        const cleanName = filename.replace(/\.mp3$/i, '');
         
         const card = document.createElement('div');
         card.className = 'track-card';
@@ -181,7 +189,9 @@
             <span class="track-title">${cleanName}</span>
             <span class="tag tag-${category}">${category}</span>
           </div>
-          <iframe src="https://drive.google.com/file/d/${track.id}/preview" width="100%" height="60" style="border:none; border-radius: 4px;" loading="lazy"></iframe>
+          <audio controls preload="none">
+            <source src="./${encodeURIComponent(filename)}" type="audio/mpeg">
+          </audio>
         `;
         container.appendChild(card);
       });
