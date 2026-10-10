@@ -181,9 +181,7 @@
             <span class="track-title">${cleanName}</span>
             <span class="tag tag-${category}">${category}</span>
           </div>
-          <audio controls preload="none">
-            <source src="https://lh3.googleusercontent.com/d/${track.id}" type="audio/mpeg">
-          </audio>
+          <iframe src="https://drive.google.com/file/d/${track.id}/preview" width="100%" height="60" style="border:none; border-radius: 4px;" loading="lazy"></iframe>
         `;
         container.appendChild(card);
       });
