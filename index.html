@@ -6,24 +6,25 @@
   <title>Church Choir Practice Tracks</title>
   <style>
     :root {
-      --primary-color: #2c3e50;
-      --bg-color: #f8f9fa;
+      --primary: #1e3a8a;
+      --bg: #f8fafc;
       --card-bg: #ffffff;
-      --border-color: #e9ecef;
+      --border: #e2e8f0;
+      --text: #0f172a;
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: #333;
-      max-width: 800px;
+      background-color: var(--bg);
+      color: var(--text);
+      max-width: 768px;
       margin: 2rem auto;
       padding: 0 1rem;
     }
 
     h1 {
-      color: var(--primary-color);
       text-align: center;
+      color: var(--primary);
       margin-bottom: 1.5rem;
     }
 
@@ -36,10 +37,10 @@
     }
 
     .filter-btn {
-      background-color: #fff;
-      border: 1px solid var(--primary-color);
-      color: var(--primary-color);
-      padding: 0.5rem 1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 0.4rem 1rem;
       border-radius: 20px;
       cursor: pointer;
       font-weight: 600;
@@ -47,41 +48,44 @@
     }
 
     .filter-btn:hover, .filter-btn.active {
-      background-color: var(--primary-color);
-      color: #fff;
+      background: var(--primary);
+      color: #ffffff;
     }
 
     .track-card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.85rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .track-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
     }
 
     .track-title {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin: 0 0 0.5rem 0;
-      color: #1a1a1a;
+      font-size: 1rem;
+      font-weight: 600;
     }
 
-    .track-tag {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: bold;
+    .tag {
+      font-size: 0.7rem;
+      font-weight: 700;
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
-      margin-bottom: 0.75rem;
       text-transform: uppercase;
     }
 
-    .tag-soprano { background-color: #e3f2fd; color: #0d47a1; }
-    .tag-alto { background-color: #f3e5f5; color: #4a148c; }
-    .tag-tenor { background-color: #e8f5e9; color: #1b5e20; }
-    .tag-bass { background-color: #fff3e0; color: #e65100; }
-    .tag-instrumental { background-color: #eceff1; color: #37474f; }
+    .tag-soprano { background-color: #dbeafe; color: #1e40af; }
+    .tag-alto { background-color: #f3e8ff; color: #6b21a8; }
+    .tag-tenor { background-color: #dcfce7; color: #166534; }
+    .tag-bass { background-color: #ffedd5; color: #9a3412; }
+    .tag-full { background-color: #f1f5f9; color: #475569; }
 
     audio {
       width: 100%;
@@ -93,141 +97,103 @@
 
   <h1>Church Choir Practice Tracks</h1>
 
-  <!-- Filter Buttons -->
   <div class="filter-container">
     <button class="filter-btn active" onclick="filterTracks('all')">All</button>
     <button class="filter-btn" onclick="filterTracks('soprano')">Soprano</button>
     <button class="filter-btn" onclick="filterTracks('alto')">Alto</button>
     <button class="filter-btn" onclick="filterTracks('tenor')">Tenor</button>
     <button class="filter-btn" onclick="filterTracks('bass')">Bass</button>
-    <button class="filter-btn" onclick="filterTracks('instrumental')">Instrumental</button>
+    <button class="filter-btn" onclick="filterTracks('full')">Full / Instrumental</button>
   </div>
 
-  <!-- Audio Tracks List -->
-  <div id="track-list">
-
-    <div class="track-card" data-category="soprano">
-      <div class="track-title">May We And God Be One</div>
-      <span class="track-tag tag-soprano">Soprano</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="soprano">
-      <div class="track-title">We Wait For Thee</div>
-      <span class="track-tag tag-soprano">Soprano</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="alto">
-      <div class="track-title">We Wait For Thee</div>
-      <span class="track-tag tag-alto">Alto</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="tenor">
-      <div class="track-title">We Wait For Thee</div>
-      <span class="track-tag tag-tenor">Tenor</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="bass">
-      <div class="track-title">How Beautiful</div>
-      <span class="track-tag tag-bass">Bass</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="bass">
-      <div class="track-title">With A Voice Of Singing</div>
-      <span class="track-tag tag-bass">Bass</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="soprano">
-      <div class="track-title">With A Voice Of Singing</div>
-      <span class="track-tag tag-soprano">Soprano</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="alto">
-      <div class="track-title">With A Voice Of Singing</div>
-      <span class="track-tag tag-alto">Alto</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="tenor">
-      <div class="track-title">With A Voice Of Singing</div>
-      <span class="track-tag tag-tenor">Tenor</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="soprano">
-      <div class="track-title">Candlelight Carol</div>
-      <span class="track-tag tag-soprano">Soprano</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="instrumental">
-      <div class="track-title">I Have Decided to Follow Jesus</div>
-      <span class="track-tag tag-instrumental">Instrumental</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="tenor">
-      <div class="track-title">For God So Loved</div>
-      <span class="track-tag tag-tenor">Tenor</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="tenor">
-      <div class="track-title">Restless Is The Heart</div>
-      <span class="track-tag tag-tenor">Tenor</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-    <div class="track-card" data-category="soprano">
-      <div class="track-title">For God So Loved</div>
-      <span class="track-tag tag-soprano">Soprano</span>
-      <audio controls preload="none">
-        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
-      </audio>
-    </div>
-
-  </div>
+  <div id="track-list"></div>
 
   <script>
+    const rawTracks = [
+      { "name": "May We And God Be One Soprano.mp3", "id": "0B4FfhlON_DBeVjFmbWRuVVBmckE" },
+      { "name": "We Wait For Thee -soprano.mp3", "id": "0B4FfhlON_DBeRzl3aHdhZWFfYWM" },
+      { "name": "We Wait For Thee Alto.mp3", "id": "0B4FfhlON_DBeNGh5WTZzX3FYbUE" },
+      { "name": "We Wait For Thee Tenor.mp3", "id": "0B4FfhlON_DBeNU56Q1IxdUx6eGM" },
+      { "name": "How Beautiful-bass.mp3", "id": "0B4FfhlON_DBednhIQnpFUDE3aUE" },
+      { "name": "With A Voice Of Singing-bass.mp3", "id": "0B4FfhlON_DBebl83Rnd0VzlyWm8" },
+      { "name": "With A Voice Of Singing-soprano.mp3", "id": "0B4FfhlON_DBea2lES2xTTUlZTHM" },
+      { "name": "With A Voice Of Singing-alto.mp3", "id": "0B4FfhlON_DBeVlFQUjBZa0JTQlU" },
+      { "name": "With A Voice Of Singing-tenor.mp3", "id": "0B4FfhlON_DBeOVJxUmFlbjJFdk0" },
+      { "name": "Candlelight carol Soprano.mp3", "id": "0B4FfhlON_DBeSlJ4NDFKNnRWOGM" },
+      { "name": "I Have Decided to Follow Jesus- (Instrumental).mp3", "id": "1L-XjZOMp-czujgJUBVGEuDHX8F-z7Ws" },
+      { "name": "For God So Loved Tenor.mp3", "id": "0B4FfhlON_DBeMTc0QjlqbThmNEk" },
+      { "name": "Restless Is The Heart-tenor.mp3", "id": "0B4FfhlON_DBeYkFZa2JSa3oxT2c" },
+      { "name": "For God so Loved Soprano.mp3", "id": "0B4FfhlON_DBeekFwaFF6ZmpxelRnZjZZZF85LUdNLWQ0MG5N" },
+      { "name": "For God So Loved Bass.mp3", "id": "0B4FfhlON_DBeZ1AwMmZNVktmV3c" },
+      { "name": "Restless Is The Heart-Alto.mp3", "id": "0B4FfhlON_DBeUkc2cGZYbjhnaFU" },
+      { "name": "Restless Is The Heart-bass.mp3", "id": "0B4FfhlON_DBeQ216RE10RkpESVU" },
+      { "name": "Restless Is The Heart -soprano.mp3", "id": "0B4FfhlON_DBeOTdDTFozcHZ2NWM" },
+      { "name": "For God so Loved Alto.mp3", "id": "0B4FfhlON_DBeM0dISnl1WV9EamR2bENUV2ExcW5TNG5OcmtN" },
+      { "name": "Gather The People.mp3", "id": "1yyKgDRa2FuhMhLFJErag2cDK4deDhm1v" },
+      { "name": "Blest Be The Lord.mp3", "id": "1PdfxH3E09NcaYbG3gLwjgXV1Z6uoR14r" },
+      { "name": "You Alone.mp3", "id": "1jwosbtfnUzJWPcKLkYPUOOt8hz4rb0rC" },
+      { "name": "Rain Down.mp3", "id": "1TXkAYX8_UyYyTvZlAPM10Im7tZKjak3B" },
+      { "name": "The First Nowell.mp3", "id": "0B4FfhlON_DBeTlFpbC1MUWZBLVBVN0c2OEVGcWxyNDI0NDF3" },
+      { "name": "Tenor BASS GABRIEL.mp3", "id": "1RlUOp2KFo96ZjiS7zbtdcSX9s8Sxmo42" },
+      { "name": "We Three Kings.mp3", "id": "1sQEbot5xVtKmZLFEVQK9-RIhyo870bNR" },
+      { "name": "One bread  One Body.mp3", "id": "0B4FfhlON_DBeT3h4N0FPUWQyYzA" },
+      { "name": "How Beautiful alto.mp3", "id": "0B4FfhlON_DBeWlhGS0pWcmZPTHM" },
+      { "name": "And Can It Be -Alto.mp3", "id": "0B4FfhlON_DBeWU1xamhQR2dZN2c" },
+      { "name": "Arise my Soul-alto.mp3", "id": "0B4FfhlON_DBeS3FyRDF0NXQtZHM" },
+      { "name": "Arise My Soul Arise-soprano.mp3", "id": "0B4FfhlON_DBeUkhCa2xuajM5UGs" },
+      { "name": "And Can It Be-soprano.mp3", "id": "0B4FfhlON_DBeOG14WHV0bmUweTQ" },
+      { "name": "Arise My Soul Arise-tenor.mp3", "id": "0B4FfhlON_DBeanpoWGR2dkducVk" },
+      { "name": "And Can It Be -tenor.mp3", "id": "0B4FfhlON_DBeN0w4VmxwWXFsM0E" },
+      { "name": "How Beautiful - soprano.mp3", "id": "0B4FfhlON_DBeRDc4RDVWZ2tDZFk" },
+      { "name": "How Beautiful Tenor.mp3", "id": "0B4FfhlON_DBeVWNSVHJrTEQ3VTg" },
+      { "name": "O Holy Night Bass 2nd.mp3", "id": "0B4FfhlON_DBed3BfNWNXYVc1QmM" },
+      { "name": "O Holy Night Tenor 2nd.mp3", "id": "0B4FfhlON_DBebklpUGR3SUh4Tk0" },
+      { "name": "O Holy Night Sop2.mp3", "id": "0B4FfhlON_DBecjY1ZUJqTDNqSk0" },
+      { "name": "O Holy Night Soprano 1.mp3", "id": "0B4FfhlON_DBeb3JsTTREYWY2QVU" },
+      { "name": "O Holy Night Alto 2nd.mp3", "id": "0B4FfhlON_DBeV2dhYU14YkVfY0E" },
+      { "name": "Be Thou Thy Vision 1.mp3", "id": "0B4FfhlON_DBeNlR2ZU1NS3EtVzA" },
+      { "name": "Celtic Song Of Farewell.mp3", "id": "0B4FfhlON_DBeNUY5dnBXYjZQWFU" }
+    ];
+
+    function getCategory(name) {
+      const lower = name.toLowerCase();
+      if (lower.includes('soprano') || lower.includes('sop2')) return 'soprano';
+      if (lower.includes('alto')) return 'alto';
+      if (lower.includes('tenor')) return 'tenor';
+      if (lower.includes('bass')) return 'bass';
+      return 'full';
+    }
+
+    function renderTracks() {
+      const container = document.getElementById('track-list');
+      container.innerHTML = '';
+
+      rawTracks.forEach(track => {
+        const category = getCategory(track.name);
+        const cleanName = track.name.replace(/\.mp3$/i, '');
+        
+        const card = document.createElement('div');
+        card.className = 'track-card';
+        card.setAttribute('data-category', category);
+        
+        card.innerHTML = `
+          <div class="track-header">
+            <span class="track-title">${cleanName}</span>
+            <span class="tag tag-${category}">${category}</span>
+          </div>
+          <audio controls preload="none">
+            <source src="https://drive.google.com/uc?export=download&id=${track.id}" type="audio/mpeg">
+          </audio>
+        `;
+        container.appendChild(card);
+      });
+    }
+
     function filterTracks(category) {
-      // Update active button state
       const buttons = document.querySelectorAll('.filter-btn');
       buttons.forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
 
-      // Filter track cards
       const cards = document.querySelectorAll('.track-card');
       cards.forEach(card => {
         if (category === 'all' || card.getAttribute('data-category') === category) {
@@ -237,6 +203,8 @@
         }
       });
     }
+
+    window.addEventListener('DOMContentLoaded', renderTracks);
   </script>
 
 </body>
