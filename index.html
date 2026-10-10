@@ -1,1 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Church Choir Practice Tracks</title>
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --border-color: #e9ecef;
+    }
 
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: #333;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background-color: #fff;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background-color: var(--primary-color);
+      color: #fff;
+    }
+
+    .track-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .track-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin: 0 0 0.5rem 0;
+      color: #1a1a1a;
+    }
+
+    .track-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .tag-soprano { background-color: #e3f2fd; color: #0d47a1; }
+    .tag-alto { background-color: #f3e5f5; color: #4a148c; }
+    .tag-tenor { background-color: #e8f5e9; color: #1b5e20; }
+    .tag-bass { background-color: #fff3e0; color: #e65100; }
+    .tag-instrumental { background-color: #eceff1; color: #37474f; }
+
+    audio {
+      width: 100%;
+      height: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Church Choir Practice Tracks</h1>
+
+  <!-- Filter Buttons -->
+  <div class="filter-container">
+    <button class="filter-btn active" onclick="filterTracks('all')">All</button>
+    <button class="filter-btn" onclick="filterTracks('soprano')">Soprano</button>
+    <button class="filter-btn" onclick="filterTracks('alto')">Alto</button>
+    <button class="filter-btn" onclick="filterTracks('tenor')">Tenor</button>
+    <button class="filter-btn" onclick="filterTracks('bass')">Bass</button>
+    <button class="filter-btn" onclick="filterTracks('instrumental')">Instrumental</button>
+  </div>
+
+  <!-- Audio Tracks List -->
+  <div id="track-list">
+
+    <div class="track-card" data-category="soprano">
+      <div class="track-title">May We And God Be One</div>
+      <span class="track-tag tag-soprano">Soprano</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="soprano">
+      <div class="track-title">We Wait For Thee</div>
+      <span class="track-tag tag-soprano">Soprano</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="alto">
+      <div class="track-title">We Wait For Thee</div>
+      <span class="track-tag tag-alto">Alto</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="tenor">
+      <div class="track-title">We Wait For Thee</div>
+      <span class="track-tag tag-tenor">Tenor</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="bass">
+      <div class="track-title">How Beautiful</div>
+      <span class="track-tag tag-bass">Bass</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="bass">
+      <div class="track-title">With A Voice Of Singing</div>
+      <span class="track-tag tag-bass">Bass</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="soprano">
+      <div class="track-title">With A Voice Of Singing</div>
+      <span class="track-tag tag-soprano">Soprano</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="alto">
+      <div class="track-title">With A Voice Of Singing</div>
+      <span class="track-tag tag-alto">Alto</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="tenor">
+      <div class="track-title">With A Voice Of Singing</div>
+      <span class="track-tag tag-tenor">Tenor</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="soprano">
+      <div class="track-title">Candlelight Carol</div>
+      <span class="track-tag tag-soprano">Soprano</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="instrumental">
+      <div class="track-title">I Have Decided to Follow Jesus</div>
+      <span class="track-tag tag-instrumental">Instrumental</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="tenor">
+      <div class="track-title">For God So Loved</div>
+      <span class="track-tag tag-tenor">Tenor</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="tenor">
+      <div class="track-title">Restless Is The Heart</div>
+      <span class="track-tag tag-tenor">Tenor</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <div class="track-card" data-category="soprano">
+      <div class="track-title">For God So Loved</div>
+      <span class="track-tag tag-soprano">Soprano</span>
+      <audio controls preload="none">
+        <source src="https://drive.google.com/uc?export=download&id=REPLACE_WITH_FILE_ID" type="audio/mpeg">
+      </audio>
+    </div>
+
+  </div>
+
+  <script>
+    function filterTracks(category) {
+      // Update active button state
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Filter track cards
+      const cards = document.querySelectorAll('.track-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
