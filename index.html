@@ -127,77 +127,27 @@
 
   <div id="track-list"></div>
 
-  <script>
-    const rawTracks = [
-      "African Alleluia.mp3",
-      "Al ShloSha.mp3",
-      "And Can It Be -Alto.mp3",
-      "And Can It Be -tenor.mp3",
-      "And Can It Be-soprano.mp3",
-      "Angels Carol Alto.mp3",
-      "Angels Carol Soprano.mp3",
-      "Angels We Have Heard On High.mp3",
-      "Arise My Soul Arise-soprano.mp3",
-      "Arise My Soul Arise-tenor.mp3",
-      "Arise my Soul-alto.mp3",
-      "At the foot alto.mp3",
-      "At the foot bass.mp3",
-      "At the foot soprano.mp3",
-      "Be Thou Thy Vision 1.mp3",
-      "Blest Be The Lord.mp3",
-      "Candlelight carol Soprano.mp3",
-      "Celtic Song Of Farewell.mp3",
-      "For God So Loved Bass.mp3",
-      "For God So Loved Tenor.mp3",
-      "For God so Loved Alto.mp3",
-      "For God so Loved Soprano.mp3",
-      "Gather The People.mp3",
-      "How Beautiful - soprano.mp3",
-      "How Beautiful Tenor.mp3",
-      "How Beautiful alto.mp3",
-      "How Beautiful-bass.mp3",
-      "I Have Decided to Follow Jesus- (Instrumental).mp3",
-      "May We And God Be One Soprano.mp3",
-      "O Holy Night Alto 2nd.mp3",
-      "O Holy Night Bass 2nd.mp3",
-      "O Holy Night Sop2.mp3",
-      "O Holy Night Soprano 1.mp3",
-      "O Holy Night Tenor 2nd.mp3",
-      "One bread  One Body.mp3",
-      "Rain Down.mp3",
-      "Restless Is The Heart -soprano.mp3",
-      "Restless Is The Heart-Alto.mp3",
-      "Restless Is The Heart-bass.mp3",
-      "Restless Is The Heart-tenor.mp3",
-      "Tenor BASS GABRIEL.mp3",
-      "The First Nowell.mp3",
-      "We Three Kings.mp3",
-      "We Wait For Thee -soprano.mp3",
-      "We Wait For Thee Alto.mp3",
-      "We Wait For Thee Tenor.mp3",
-      "With A Voice Of Singing-alto.mp3",
-      "With A Voice Of Singing-bass.mp3",
-      "With A Voice Of Singing-soprano.mp3",
-      "With A Voice Of Singing-tenor.mp3",
-      "You Alone.mp3"
-    ];
+<script>
+  const GITHUB_USERNAME = "jshea305";
+  const REPO_NAME = "SB-choir";
 
-    function getCategory(filename) {
-      const lower = filename.toLowerCase();
-      if (lower.includes('soprano') || lower.includes('sop2')) return 'soprano';
-      if (lower.includes('alto')) return 'alto';
-      if (lower.includes('tenor')) return 'tenor';
-      if (lower.includes('bass')) return 'bass';
-      return 'full';
-    }
+  async function loadRepoTracks() {
+    const container = document.getElementById('track-list');
+    container.innerHTML = '<p style="text-align:center;">Loading practice tracks...</p>';
 
-    function renderTracks() {
-      const container = document.getElementById('track-list');
-      container.innerHTML = '';
+    try {
+      // Fetch all files from the root of the GitHub repository
+      const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/`);
+      const files = await response.json();
 
-      rawTracks.forEach(filename => {
-        const category = getCategory(filename);
-        const cleanName = filename.replace(/\.mp3$/i, '');
+      container.innerHTML = ''; // Clear loading message
+
+      // Filter for .mp3 files only
+      const mp3Files = files.filter(file => file.name.toLowerCase().endsWith('.mp3'));
+
+      mp3Files.forEach(file => {
+        const category = getCategory(file.name);
+        const cleanName = file.name.replace(/\.mp3$/i, '');
         
         const card = document.createElement('div');
         card.className = 'track-card';
@@ -209,31 +159,44 @@
             <span class="tag tag-${category}">${category}</span>
           </div>
           <audio controls preload="none">
-            <source src="./${encodeURIComponent(filename)}" type="audio/mpeg">
+            <source src="./${encodeURIComponent(file.name)}" type="audio/mpeg">
             Your browser does not support the audio element.
           </audio>
         `;
         container.appendChild(card);
       });
+    } catch (err) {
+      console.error('Error fetching tracks from GitHub:', err);
+      container.innerHTML = '<p style="text-align:center; color:red;">Failed to load tracks.</p>';
     }
+  }
 
-    function filterTracks(category) {
-      const buttons = document.querySelectorAll('.filter-btn');
-      buttons.forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+  function getCategory(filename) {
+    const lower = filename.toLowerCase();
+    if (lower.includes('soprano') || lower.includes('sop2')) return 'soprano';
+    if (lower.includes('alto')) return 'alto';
+    if (lower.includes('tenor')) return 'tenor';
+    if (lower.includes('bass')) return 'bass';
+    return 'full';
+  }
 
-      const cards = document.querySelectorAll('.track-card');
-      cards.forEach(card => {
-        if (category === 'all' || card.getAttribute('data-category') === category) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
+  function filterTracks(category) {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
 
-    window.addEventListener('DOMContentLoaded', renderTracks);
-  </script>
+    const cards = document.querySelectorAll('.track-card');
+    cards.forEach(card => {
+      if (category === 'all' || card.getAttribute('data-category') === category) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', loadRepoTracks);
+</script>
 
 </body>
 </html>
