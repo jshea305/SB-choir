@@ -1,202 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Church Choir Practice Tracks</title>
-  <style>
-    :root {
-      --primary: #1e3a8a;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --border: #e2e8f0;
-      --text: #0f172a;
-    }
+async function loadDynamicTracks() {
+      const container = document.getElementById('track-list');
+      container.innerHTML = '<div class="no-results">Scanning practice tracks...</div>';
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      max-width: 768px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    h1 {
-      text-align: center;
-      color: var(--primary);
-      margin-bottom: 1.5rem;
-      font-size: 2rem;
-    }
-
-    .filter-container {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .filter-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--primary);
-      color: var(--primary);
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--primary);
-      color: #ffffff;
-    }
-
-    .track-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-    }
-
-    .track-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-    }
-
-    .track-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-    }
-
-    .tag {
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .tag-soprano { background-color: #dbeafe; color: #1e40af; }
-    .tag-alto { background-color: #f3e8ff; color: #6b21a8; }
-    .tag-tenor { background-color: #dcfce7; color: #166534; }
-    .tag-bass { background-color: #ffedd5; color: #9a3412; }
-    .tag-full { background-color: #f1f5f9; color: #475569; }
-
-    audio {
-      width: 100%;
-      height: 42px;
-      border-radius: 8px;
-      outline: none;
-    }
-    .header-banner {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-.header-banner img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-  </style>
-</head>
-<body>
-  <!-- Top Banner Image -->
-  <div class="header-banner">
-    <img src="./Media/church-and-parish-center.png" alt="Church and Parish Center">
-  </div>
-
-  <h1>St. Bernard’s Church Choir Practice Tracks</h1>
-
-  <div class="filter-container">
-    <button class="filter-btn active" onclick="filterTracks('all')">All</button>
-    <button class="filter-btn" onclick="filterTracks('soprano')">Soprano</button>
-    <button class="filter-btn" onclick="filterTracks('alto')">Alto</button>
-    <button class="filter-btn" onclick="filterTracks('tenor')">Tenor</button>
-    <button class="filter-btn" onclick="filterTracks('bass')">Bass</button>
-    <button class="filter-btn" onclick="filterTracks('full')">Full / Instrumental</button>
-  </div>
-
-  <div id="track-list"></div>
-
-<script>
-  const GITHUB_USERNAME = "jshea305";
-  const REPO_NAME = "SB-choir";
-
-  async function loadRepoTracks() {
-    const container = document.getElementById('track-list');
-    container.innerHTML = '<p style="text-align:center;">Loading practice tracks...</p>';
-
-    try {
-      // Fetch all files from the root of the GitHub repository
-      const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/`);
-      const files = await response.json();
-
-      container.innerHTML = ''; // Clear loading message
-
-      // Filter for .mp3 files only
-      const mp3Files = files.filter(file => file.name.toLowerCase().endsWith('.mp3'));
-
-      mp3Files.forEach(file => {
-        const category = getCategory(file.name);
-        const cleanName = file.name.replace(/\.mp3$/i, '');
+      try {
+        // Try 'Media' first
+        let response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/Media`);
+        detectedFolder = 'Media';
         
-        const card = document.createElement('div');
-        card.className = 'track-card';
-        card.setAttribute('data-category', category);
-        
-        card.innerHTML = `
-          <div class="track-header">
-            <span class="track-title">${cleanName}</span>
-            <span class="tag tag-${category}">${category}</span>
-          </div>
-          <audio controls preload="none">
-           <source src="./${detectedFolder}/${encodeURIComponent(track.name)}" type="audio/mpeg">
-            Your browser does not support the audio element.
-          </audio>
-        `;
-        container.appendChild(card);
-      });
-    } catch (err) {
-      console.error('Error fetching tracks from GitHub:', err);
-      container.innerHTML = '<p style="text-align:center; color:red;">Failed to load tracks.</p>';
-    }
-  }
+        // Fallback to lowercase 'media' if 'Media' is not found
+        if (!response.ok) {
+          detectedFolder = 'media';
+          response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/media`);
+        }
 
-  function getCategory(filename) {
-    const lower = filename.toLowerCase();
-    if (lower.includes('soprano') || lower.includes('sop2')) return 'soprano';
-    if (lower.includes('alto')) return 'alto';
-    if (lower.includes('tenor')) return 'tenor';
-    if (lower.includes('bass')) return 'bass';
-    return 'full';
-  }
+        if (!response.ok) {
+          throw new Error(`GitHub API returned status: ${response.status}`);
+        }
 
-  function filterTracks(category) {
-    const buttons = document.querySelectorAll('.filter-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+        const files = await response.json();
 
-    const cards = document.querySelectorAll('.track-card');
-    cards.forEach(card => {
-      if (category === 'all' || card.getAttribute('data-category') === category) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
+        allTracks = files
+          .filter(file => file.name.toLowerCase().endsWith('.mp3'))
+          .map(file => ({
+            name: file.name,
+            cleanName: file.name.replace(/\.mp3$/i, ''),
+            category: getCategory(file.name)
+          }));
+
+        renderTracks(allTracks);
+      } catch (err) {
+        console.error('Dynamic fetch error:', err);
+        container.innerHTML = '<div class="no-results" style="color:#dc2626;">Failed to load tracks dynamically. Check repository folder permissions or API limits.</div>';
       }
-    });
-  }
-
-  window.addEventListener('DOMContentLoaded', loadRepoTracks);
-</script>
+    }
 
 </body>
 </html>
