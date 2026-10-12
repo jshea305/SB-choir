@@ -75,21 +75,17 @@
       position: sticky;
       top: 0.75rem;
       z-index: 50;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 0.85rem;
+      padding: 1rem;
       margin-bottom: 1.5rem;
       box-shadow: var(--shadow-md);
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .search-box {
-      width: 100%;
+      gap: 0.85rem;
     }
 
     .search-input {
@@ -108,22 +104,31 @@
       box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
     }
 
-    .filter-container {
+    .filter-group {
       display: flex;
+      align-items: center;
       justify-content: center;
       gap: 0.4rem;
       flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-right: 0.25rem;
     }
 
     .filter-btn {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text-muted);
-      padding: 0.35rem 0.85rem;
+      padding: 0.3rem 0.75rem;
       border-radius: 20px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       transition: all 0.2s ease;
     }
 
@@ -135,6 +140,12 @@
     .filter-btn.active {
       background: var(--primary);
       border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .season-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
       color: #ffffff;
     }
 
@@ -176,6 +187,11 @@
       color: var(--primary);
     }
 
+    .tag-container {
+      display: flex;
+      gap: 0.35rem;
+    }
+
     .tag {
       font-size: 0.68rem;
       font-weight: 700;
@@ -190,6 +206,11 @@
     .tag-tenor { background-color: #dcfce7; color: #166534; }
     .tag-bass { background-color: #ffedd5; color: #9a3412; }
     .tag-full { background-color: #f1f5f9; color: #475569; }
+
+    .tag-season {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
 
     audio {
       width: 100%;
@@ -219,16 +240,26 @@
 
   <main class="container">
     <div class="control-panel">
-      <div class="search-box">
-        <input type="text" id="searchInput" class="search-input" placeholder="Search track titles..." oninput="applyFilters()">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search track titles..." oninput="applyFilters()">
+      
+      <!-- Liturgical Season Filters -->
+      <div class="filter-group">
+        <span class="filter-label">Season:</span>
+        <button class="filter-btn season-btn active" onclick="setSeason('all', this)">All</button>
+        <button class="filter-btn season-btn" onclick="setSeason('Advent / Christmas', this)">Advent/Christmas</button>
+        <button class="filter-btn season-btn" onclick="setSeason('Lent / Easter', this)">Lent/Easter</button>
+        <button class="filter-btn season-btn" onclick="setSeason('Ordinary Time', this)">Ordinary Time</button>
       </div>
-      <div class="filter-container">
-        <button class="filter-btn active" onclick="setCategory('all', this)">All</button>
-        <button class="filter-btn" onclick="setCategory('soprano', this)">Soprano</button>
-        <button class="filter-btn" onclick="setCategory('alto', this)">Alto</button>
-        <button class="filter-btn" onclick="setCategory('tenor', this)">Tenor</button>
-        <button class="filter-btn" onclick="setCategory('bass', this)">Bass</button>
-        <button class="filter-btn" onclick="setCategory('full', this)">Full / Instrumental</button>
+
+      <!-- Voice Category Filters -->
+      <div class="filter-group">
+        <span class="filter-label">Voice:</span>
+        <button class="filter-btn voice-btn active" onclick="setVoice('all', this)">All</button>
+        <button class="filter-btn voice-btn" onclick="setVoice('soprano', this)">Soprano</button>
+        <button class="filter-btn voice-btn" onclick="setVoice('alto', this)">Alto</button>
+        <button class="filter-btn voice-btn" onclick="setVoice('tenor', this)">Tenor</button>
+        <button class="filter-btn voice-btn" onclick="setVoice('bass', this)">Bass</button>
+        <button class="filter-btn voice-btn" onclick="setVoice('full', this)">Full / Instrumental</button>
       </div>
     </div>
 
@@ -236,7 +267,8 @@
   </main>
 
   <script>
-    let currentCategory = 'all';
+    let currentSeason = 'all';
+    let currentVoice = 'all';
     let allTracks = [];
 
     async function loadTracks() {
@@ -246,19 +278,25 @@
       try {
         const response = await fetch('./tracks.json');
         if (!response.ok) throw new Error('tracks.json not found');
-        const fileList = await response.json();
+        const rawData = await response.json();
 
-        allTracks = fileList.map(filename => ({
-          name: filename,
-          cleanName: filename.replace(/\.mp3$/i, ''),
-          category: getCategory(filename),
-          path: `./Media/${encodeURIComponent(filename)}`
-        }));
+        allTracks = rawData.map(item => {
+          const filename = typeof item === 'string' ? item : item.name;
+          const season = typeof item === 'object' && item.season ? item.season : 'Ordinary Time';
+          
+          return {
+            name: filename,
+            cleanName: filename.replace(/\.mp3$/i, ''),
+            category: getCategory(filename),
+            season: season,
+            path: `./Media/${encodeURIComponent(filename)}`
+          };
+        });
 
         renderTracks(allTracks);
       } catch (err) {
         console.error('Error loading tracks:', err);
-        container.innerHTML = '<div class="no-results" style="color:#dc2626;">Failed to load practice tracks. Ensure tracks.json exists in root.</div>';
+        container.innerHTML = '<div class="no-results" style="color:#dc2626;">Failed to load tracks. Ensure tracks.json exists in root.</div>';
       }
     }
 
@@ -276,19 +314,21 @@
       container.innerHTML = '';
 
       if (tracks.length === 0) {
-        container.innerHTML = '<div class="no-results">No practice tracks match your search.</div>';
+        container.innerHTML = '<div class="no-results">No practice tracks match your search filters.</div>';
         return;
       }
 
       tracks.forEach(track => {
         const card = document.createElement('div');
         card.className = 'track-card';
-        card.setAttribute('data-category', track.category);
 
         card.innerHTML = `
           <div class="track-header">
             <span class="track-title">${track.cleanName}</span>
-            <span class="tag tag-${track.category}">${track.category}</span>
+            <div class="tag-container">
+              <span class="tag tag-season">${track.season}</span>
+              <span class="tag tag-${track.category}">${track.category}</span>
+            </div>
           </div>
           <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)">
             <source src="${track.path}" type="audio/mpeg">
@@ -299,9 +339,16 @@
       });
     }
 
-    function setCategory(category, buttonEl) {
-      currentCategory = category;
-      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    function setSeason(season, buttonEl) {
+      currentSeason = season;
+      document.querySelectorAll('.season-btn').forEach(btn => btn.classList.remove('active'));
+      buttonEl.classList.add('active');
+      applyFilters();
+    }
+
+    function setVoice(voice, buttonEl) {
+      currentVoice = voice;
+      document.querySelectorAll('.voice-btn').forEach(btn => btn.classList.remove('active'));
       buttonEl.classList.add('active');
       applyFilters();
     }
@@ -310,9 +357,10 @@
       const query = document.getElementById('searchInput').value.toLowerCase().trim();
 
       const filtered = allTracks.filter(track => {
-        const matchesCategory = (currentCategory === 'all' || track.category === currentCategory);
+        const matchesSeason = (currentSeason === 'all' || track.season === currentSeason);
+        const matchesVoice = (currentVoice === 'all' || track.category === currentVoice);
         const matchesQuery = track.cleanName.toLowerCase().includes(query);
-        return matchesCategory && matchesQuery;
+        return matchesSeason && matchesVoice && matchesQuery;
       });
 
       renderTracks(filtered);
