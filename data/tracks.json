@@ -301,5 +301,29 @@
 { "name": "Bass Psalm 24 Lord This Is The People.mp3", "season": "2026-27" },
 { "name": "Soprano Waiting In Silence.mp3", "season": "2026-27" },
 { "name": "Alto Waiting In Silence.mp3", "season": "2026-27" },
-{ "name": "Ten Bass Waiting In Silence.mp3", "season": "2026-27" }
+{ "name": "Ten Bass Waiting In Silence.mp3", "season": "2026-27" },
+ {
+    "title": "Waiting in Silence",
+    "composer": "Carey Landry",
+    "season": "2026-27",
+    "youtubeUrl": "https://www.youtube.com/watch?v=yCjIFnMUR4k",
+    "parts": {
+      "soprano": "Soprano Waiting In Silence.mp3",
+      "alto": "Alto Waiting In Silence.mp3",
+      "tenor": "Ten Bass Waiting In Silence.mp3",
+      "bass": "Ten Bass Waiting In Silence.mp3"
+    }
+  },
+  {
+    "title": "Psalm 24 Lord This Is The People",
+    "composer": "",
+    "season": "2026-27",
+    "youtubeUrl": "https://www.youtube.com/watch?v=EXAMPLE_ID",
+    "parts": {
+      "soprano": "Soprano Psalm 24 Lord This Is The People.mp3",
+      "alto": "Alto Psalm 24 Lord This Is The People.mp3",
+      "tenor": "Psalm 24 Tenor Lord This Is The People.mp3",
+      "bass": "Bass Psalm 24 Lord This Is The People.mp3"
+    }
+  }
 ]
