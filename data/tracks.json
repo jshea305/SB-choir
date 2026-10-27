@@ -292,31 +292,14 @@
 { "name": "With A Voice Of Singing-soprano.mp3", "season": "Ordinary Time" },
 { "name": "With A Voice Of Singing-tenor.mp3", "season": "Ordinary Time" },
 { "name": "Worthy is the Lamb.mp3", "season": "Lent / Easter" },
-{ "name": "Yearning Soprano.mp3", "season": "Advent / Christmas" }
- {
-    "title": "Existing Song Title",
-    "season": "2025-26",
-    "parts": {
-      "soprano": "Soprano Existing Song.mp3",
-      "alto": "Alto Existing Song.mp3",
-      "tenor": "Tenor Existing Song.mp3",
-      "bass": "Bass Existing Song.mp3"
-    }
-  },
-  {
-    "title": "Psalm 24 Lord This Is The People",
-    "season": "2026-27",
-    "parts": {
-      "soprano": "Soprano Psalm 24 Lord This Is The....mp3",
-      "alto": "Alto Psalm 24 Lord This Is The Peo....mp3",
-      "tenor": "Psalm 24 Tenor Lord This Is The Pe....mp3",
-      "bass": "Bass Psalm 24 Lord This Is The Peo....mp3"
-    }
-  },
-  {
-    "title": "Waiting In Silence",
-    "season": "2026-27",
-    "parts": {
-      "soprano": "Soprano Waiting In Silence.mp3",
-      "alto": "Alto Waiting In Silence.mp3",
-      "tenor": "Ten Bass Waiting In Silence.mp3",
+{ "name": "Yearning Soprano.mp3", "season": "Advent / Christmas" },
+{ "name": "Worthy is the Lamb.mp3", "season": "Lent / Easter" },
+{ "name": "Yearning Soprano.mp3", "season": "Advent / Christmas" },
+{ "name": "Soprano Psalm 24 Lord This Is The People.mp3", "season": "Advent / Christmas" },
+{ "name": "Alto Psalm 24 Lord This Is The People.mp3", "season": "Advent / Christmas" },
+{ "name": "Psalm 24 Tenor Lord This Is The People.mp3", "season": "Advent / Christmas" },
+{ "name": "Bass Psalm 24 Lord This Is The People.mp3", "season": "Advent / Christmas" },
+{ "name": "Soprano Waiting In Silence.mp3", "season": "Advent / Christmas" },
+{ "name": "Alto Waiting In Silence.mp3", "season": "Advent / Christmas" },
+{ "name": "Ten Bass Waiting In Silence.mp3", "season": "Advent / Christmas" }
+]
