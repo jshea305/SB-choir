@@ -295,14 +295,7 @@
 { "name": "Yearning Soprano.mp3", "season": "Advent / Christmas" },
 { "name": "Worthy is the Lamb.mp3", "season": "Lent / Easter" },
 { "name": "Yearning Soprano.mp3", "season": "Advent / Christmas" },
-{ "name": "Soprano Psalm 24 Lord This Is The People.mp3", "season": "2026-27" },
-{ "name": "Alto Psalm 24 Lord This Is The People.mp3", "season": "2026-27" },
-{ "name": "Psalm 24 Tenor Lord This Is The People.mp3", "season": "2026-27" },
-{ "name": "Bass Psalm 24 Lord This Is The People.mp3", "season": "2026-27" },
-{ "name": "Soprano Waiting In Silence.mp3", "season": "2026-27" },
-{ "name": "Alto Waiting In Silence.mp3", "season": "2026-27" },
-{ "name": "Ten Bass Waiting In Silence.mp3", "season": "2026-27" },
- {
+  {
     "title": "Waiting in Silence",
     "composer": "Carey Landry",
     "season": "2026-27",
