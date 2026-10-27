@@ -5,19 +5,35 @@ let allTracks = [];
 async function loadTracks() {
   const container = document.getElementById('track-list');
   if (!container) return;
-  
+
   container.innerHTML = '<div class="no-results">Loading practice tracks...</div>';
 
   try {
-    const response = await fetch('data/tracks.json'); 
+    const response = await fetch('data/tracks.json');
     if (!response.ok) throw new Error('tracks.json not found');
     const rawData = await response.json();
 
     allTracks = rawData.map(item => {
-      const filename = typeof item === 'string' ? item : item.name;
+      // If item is a grouped song with a title
+      if (typeof item === 'object' && item.title) {
+        return {
+          isGrouped: true,
+          title: item.title,
+          composer: item.composer || '',
+          voicing: item.voicing || '',
+          liturgicalUse: item.liturgicalUse || '',
+          season: item.season || 'Ordinary Time',
+          youtubeUrl: item.youtubeUrl || null,
+          parts: item.parts || {}
+        };
+      }
+
+      // Legacy flat track structure
+      const filename = typeof item === 'string' ? item : (item.name || 'Untitled');
       const season = typeof item === 'object' && item.season ? item.season : 'Ordinary Time';
-      
+
       return {
+        isGrouped: false,
         name: filename,
         cleanName: filename.replace(/\.mp3$/i, ''),
         category: getCategory(filename),
@@ -26,7 +42,7 @@ async function loadTracks() {
       };
     });
 
-    renderTracks(allTracks);
+    applyFilters();
   } catch (err) {
     console.error('Error loading tracks:', err);
     container.innerHTML = '<div class="no-results" style="color:#dc2626;">Failed to load tracks. Ensure tracks.json exists in data directory.</div>';
@@ -45,7 +61,7 @@ function getCategory(filename) {
 function renderTracks(tracks) {
   const container = document.getElementById('track-list');
   if (!container) return;
-  
+
   container.innerHTML = '';
 
   if (tracks.length === 0) {
@@ -57,19 +73,83 @@ function renderTracks(tracks) {
     const card = document.createElement('div');
     card.className = 'track-card';
 
-    card.innerHTML = `
-      <div class="track-header">
-        <span class="track-title">${track.cleanName}</span>
-        <div class="tag-container">
-          <span class="tag tag-season">${track.season}</span>
-          <span class="tag tag-${track.category}">${track.category}</span>
+    if (track.isGrouped) {
+      // Render Grouped Song with Metadata & Voice Parts
+      const parts = track.parts;
+      card.innerHTML = `
+        <div class="track-header" style="flex-direction: column; align-items: flex-start; gap: 4px;">
+          <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+            <span class="track-title" style="font-size: 1.2rem; font-weight: 700;">${track.title}</span>
+            <div class="tag-container">
+              <span class="tag tag-season">${track.season}</span>
+              ${track.voicing ? `<span class="tag">${track.voicing}</span>` : ''}
+            </div>
+          </div>
+          ${track.composer ? `<div style="font-size: 0.85rem; color: #64748b; font-style: italic;">by ${track.composer}</div>` : ''}
         </div>
-      </div>
-      <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)">
-        <source src="${track.path}" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
-    `;
+
+        ${track.youtubeUrl ? `
+          <div style="margin: 10px 0;">
+            <a href="${track.youtubeUrl}" target="_blank" rel="noopener" class="link-btn youtube-btn" style="background: #ff0000; color: #fff; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 0.85rem; display: inline-block;">
+              ▶ Listen to Full Recording on YouTube
+            </a>
+          </div>
+        ` : ''}
+
+        <div class="parts-list" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+          ${parts.soprano ? `
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="tag tag-soprano" style="min-width: 70px; text-align: center;">Soprano</span>
+              <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)" style="flex: 1;">
+                <source src="./Media/${encodeURIComponent(parts.soprano)}" type="audio/mpeg">
+              </audio>
+            </div>
+          ` : ''}
+
+          ${parts.alto ? `
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="tag tag-alto" style="min-width: 70px; text-align: center;">Alto</span>
+              <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)" style="flex: 1;">
+                <source src="./Media/${encodeURIComponent(parts.alto)}" type="audio/mpeg">
+              </audio>
+            </div>
+          ` : ''}
+
+          ${parts.tenor ? `
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="tag tag-tenor" style="min-width: 70px; text-align: center;">Tenor</span>
+              <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)" style="flex: 1;">
+                <source src="./Media/${encodeURIComponent(parts.tenor)}" type="audio/mpeg">
+              </audio>
+            </div>
+          ` : ''}
+
+          ${parts.bass ? `
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="tag tag-bass" style="min-width: 70px; text-align: center;">Bass</span>
+              <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)" style="flex: 1;">
+                <source src="./Media/${encodeURIComponent(parts.bass)}" type="audio/mpeg">
+              </audio>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    } else {
+      // Legacy Single Track Rendering
+      card.innerHTML = `
+        <div class="track-header">
+          <span class="track-title">${track.cleanName}</span>
+          <div class="tag-container">
+            <span class="tag tag-season">${track.season}</span>
+            <span class="tag tag-${track.category}">${track.category}</span>
+          </div>
+        </div>
+        <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)">
+          <source src="${track.path}" type="audio/mpeg">
+        </audio>
+      `;
+    }
+
     container.appendChild(card);
   });
 }
@@ -94,8 +174,25 @@ function applyFilters() {
 
   const filtered = allTracks.filter(track => {
     const matchesSeason = (currentSeason === 'all' || track.season === currentSeason);
-    const matchesVoice = (currentVoice === 'all' || track.category === currentVoice);
-    const matchesQuery = track.cleanName.toLowerCase().includes(query);
+
+    let matchesVoice = true;
+    if (currentVoice !== 'all') {
+      if (track.isGrouped) {
+        matchesVoice = Boolean(track.parts[currentVoice]);
+      } else {
+        matchesVoice = (track.category === currentVoice);
+      }
+    }
+
+    let matchesQuery = true;
+    if (query) {
+      if (track.isGrouped) {
+        matchesQuery = track.title.toLowerCase().includes(query) || track.composer.toLowerCase().includes(query);
+      } else {
+        matchesQuery = track.cleanName.toLowerCase().includes(query);
+      }
+    }
+
     return matchesSeason && matchesVoice && matchesQuery;
   });
 
@@ -107,7 +204,9 @@ function onTrackPlay(audioEl) {
     if (other !== audioEl) other.pause();
   });
   document.querySelectorAll('.track-card').forEach(card => card.classList.remove('playing'));
-  audioEl.closest('.track-card').classList.add('playing');
+  if (audioEl.closest('.track-card')) {
+    audioEl.closest('.track-card').classList.add('playing');
+  }
 }
 
 function onTrackPause(audioEl) {
@@ -116,11 +215,9 @@ function onTrackPause(audioEl) {
   }
 }
 
-// Attach event listeners after DOM is fully loaded
 window.addEventListener('DOMContentLoaded', () => {
   loadTracks();
 
-  // Attach Season Button Event Listeners
   document.querySelectorAll('.season-btn').forEach(button => {
     button.addEventListener('click', (e) => {
       const seasonValue = e.target.getAttribute('onclick')
