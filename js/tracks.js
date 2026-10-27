@@ -8,7 +8,7 @@ let currentSeason = 'all';
       container.innerHTML = '<div class="no-results">Loading practice tracks...</div>';
 
       try {
-        const response = await fetch('./tracks.json');
+        const response = await fetch('data/tracks.json'); 
         if (!response.ok) throw new Error('tracks.json not found');
         const rawData = await response.json();
 
