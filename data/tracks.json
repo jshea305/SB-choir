@@ -319,4 +319,17 @@
       "bass": "Bass Psalm 24 Lord This Is The People.mp3"
     }
   }
+ {
+    "id": "angels-carol",
+    "title": "Angels' Carol",
+    "composer": "John Rutter",
+    "season": "2026-27",
+    "youtubeUrl": "https://www.youtube.com/watch?v=EXAMPLE_ID",
+    "parts": {
+      "soprano": "Angels Carol Soprano.mp3",
+      "alto": "Angels Carol Alto.mp3",
+      "tenor": "Angels Carol Tenor.mp3",
+      "bass": "Angels Carol Bass.mp3"
+    }
+  }
 ]
