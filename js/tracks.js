@@ -1,4 +1,4 @@
-const response = await fetch('data/tracks.json');
+
 let currentSeason = 'all';
     let currentVoice = 'all';
     let allTracks = [];
