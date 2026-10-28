@@ -1,79 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>St. Bernard Choir Practice Tracks</title>
-  <link rel="stylesheet" href="css/styles.css">
-  
-  <!-- Link to the JS file inside the js/ directory -->
-  <script src="js/tracks.js" defer></script>
-</head>
-
-<body>
-
-  <div class="header-banner">
-    <img src="Media/SBC.jpg." alt="St. Bernard Church & Parish Center">
-  </div>
-
-  <main class="container">
-    <!-- Main Header & Navigation -->
-    <header class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
-      <div>
-        <h1 style="margin: 0;">Choir Practice Tracks</h1>
-        <p style="margin: 4px 0 0 0; color: #64748b;">St. Bernard Church • North Kingstown, RI</p>
-      </div>
-
-      <!-- Unified Schedule Navigation Bar -->
-      <nav style="display: flex; gap: 12px; align-items: center;">
-        <a href="index.html" style="font-weight: 600; text-decoration: none; color: #1e293b;">
-          Practice Tracks
-        </a>
-        
-        <span style="color: #cbd5e1;">|</span>
-
-        <a href="mass-schedule.html" style="background-color: #2563eb; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-          📅 Mass Schedule
-        </a>
-
-        <a href="mass-schedule.html" target="_blank" rel="noopener" style="font-size: 0.85rem; color: #64748b; text-decoration: underline;">
-          (Open in new tab ↗)
-        </a>
-      </nav>
-    </header>
-
-    <div class="control-panel">
-      <input type="text" id="searchInput" class="search-input" placeholder="Search track titles or composers..." oninput="applyFilters()">
-      
-      <!-- Liturgical Season Filters (Updated with "Current") -->
-      <div class="filter-group">
-        <span class="filter-label">Season:</span>
-        <button class="filter-btn season-btn active" onclick="setSeason('all', this)">All</button>
-        <button class="filter-btn season-btn" onclick="setSeason('current', this)" style="border: 2px solid #2563eb; font-weight: 700;">★ Current (2026–27)</button>
-        <button class="filter-btn season-btn" onclick="setSeason('Ordinary Time', this)">Ordinary Time</button>
-        <button class="filter-btn season-btn" onclick="setSeason('Advent', this)">Advent</button>
-        <button class="filter-btn season-btn" onclick="setSeason('Christmas', this)">Christmas</button>
-        <button class="filter-btn season-btn" onclick="setSeason('Lent / Easter', this)">Lent/Easter</button>
-      </div>
-
-      <!-- Voice Category Filters -->
-      <div class="filter-group">
-        <span class="filter-label">Voice:</span>
-        <button class="filter-btn voice-btn active" onclick="setVoice('all', this)">All</button>
-        <button class="filter-btn voice-btn" onclick="setVoice('soprano', this)">Soprano</button>
-        <button class="filter-btn voice-btn" onclick="setVoice('alto', this)">Alto</button>
-        <button class="filter-btn voice-btn" onclick="setVoice('tenor', this)">Tenor</button>
-        <button class="filter-btn voice-btn" onclick="setVoice('bass', this)">Bass</button>
-        <button class="filter-btn voice-btn" onclick="setVoice('full', this)">Full / Instrumental</button>
-      </div>
+<main class="container">
+  <!-- Main Header & Navigation -->
+  <header class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div>
+      <h1 style="margin: 0;">Choir Practice Tracks</h1>
+      <p style="margin: 4px 0 0; color: #64748b;">St. Bernard Church • North Kingstown, RI</p>
     </div>
 
-    <div id="track-list" class="track-list"></div>
-  </main>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <span class="nav-link active">Practice Tracks</span>
+      <span class="nav-divider">|</span>
+      <a href="mass-schedule.html" class="nav-btn-mass">
+        📅 Mass Schedule
+      </a>
+      <a href="mass-schedule.html" target="_blank" class="nav-link-subtle">(Open in new tab ↗)</a>
+    </nav>
+  </header>
 
-</body>
-</html>
+  <!-- 1. CURRENT PRACTICE TRACKS (TOP OF PAGE) -->
+  <section id="current-tracks-section">
+    <div id="tracks-container">
+      <!-- Current tracks render here automatically on page load -->
+    </div>
+  </section>
+
+  <!-- 2. ARCHIVE & FILTER CONTROLS (BELOW CURRENT TRACKS) -->
+  <section id="archive-section" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #cbd5e1;">
+    <h2 style="font-size: 1.25rem; color: #334155; margin-bottom: 12px;">Archive & Filter Tracks</h2>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search track titles or composers..." />
+
+      <div class="filter-group">
+        <span class="filter-label">SEASON:</span>
+        <button class="season-btn" data-season="all">All</button>
+        <button class="season-btn active" data-season="2026-27">★ Current (2026–27)</button>
+        <button class="season-btn" data-season="Ordinary Time">Ordinary Time</button>
+        <button class="season-btn" data-season="Advent">Advent</button>
+        <button class="season-btn" data-season="Christmas">Christmas</button>
+        <button class="season-btn" data-season="Lent/Easter">Lent/Easter</button>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">VOICE:</span>
+        <button class="voice-btn active" data-voice="all">All</button>
+        <button class="voice-btn" data-voice="soprano">Soprano</button>
+        <button class="voice-btn" data-voice="alto">Alto</button>
+        <button class="voice-btn" data-voice="tenor">Tenor</button>
+        <button class="voice-btn" data-voice="bass">Bass</button>
+        <button class="voice-btn" data-voice="full">Full / Instrumental</button>
+      </div>
+    </div>
+  </section>
+</main>
 
 
 
