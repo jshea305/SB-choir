@@ -51,7 +51,7 @@ async function loadTracks() {
 
 function getCategory(filename) {
   const lower = filename.toLowerCase();
-  if (lower.includes('soprano') || lower.includes('sop2')) return 'soprano';
+  if (lower.includes('soprano') || lower.includes('sop2') || lower.includes('sop')) return 'soprano';
   if (lower.includes('alto')) return 'alto';
   if (lower.includes('tenor')) return 'tenor';
   if (lower.includes('bass')) return 'bass';
@@ -74,7 +74,6 @@ function renderTracks(tracks) {
     card.className = 'track-card';
 
     if (track.isGrouped) {
-      // Render Grouped Song with Metadata & Voice Parts
       const parts = track.parts;
       card.innerHTML = `
         <div class="track-header" style="flex-direction: column; align-items: flex-start; gap: 4px;">
@@ -97,45 +96,14 @@ function renderTracks(tracks) {
         ` : ''}
 
         <div class="parts-list" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-          ${parts.soprano ? `
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <span class="tag tag-soprano" style="min-width: 70px; text-align: center;">Soprano</span>
-              <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)" style="flex: 1;">
-                <source src="./Media/${encodeURIComponent(parts.soprano)}" type="audio/mpeg">
-              </audio>
-            </div>
-          ` : ''}
-
-          ${parts.alto ? `
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <span class="tag tag-alto" style="min-width: 70px; text-align: center;">Alto</span>
-              <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)" style="flex: 1;">
-                <source src="./Media/${encodeURIComponent(parts.alto)}" type="audio/mpeg">
-              </audio>
-            </div>
-          ` : ''}
-
-          ${parts.tenor ? `
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <span class="tag tag-tenor" style="min-width: 70px; text-align: center;">Tenor</span>
-              <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)" style="flex: 1;">
-                <source src="./Media/${encodeURIComponent(parts.tenor)}" type="audio/mpeg">
-              </audio>
-            </div>
-          ` : ''}
-
-          ${parts.bass ? `
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <span class="tag tag-bass" style="min-width: 70px; text-align: center;">Bass</span>
-              <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)" style="flex: 1;">
-                <source src="./Media/${encodeURIComponent(parts.bass)}" type="audio/mpeg">
-              </audio>
-            </div>
-          ` : ''}
+          ${parts.soprano ? renderAudioRow('Soprano', parts.soprano, 'soprano') : ''}
+          ${parts.alto ? renderAudioRow('Alto', parts.alto, 'alto') : ''}
+          ${parts.tenor ? renderAudioRow('Tenor', parts.tenor, 'tenor') : ''}
+          ${parts.bass ? renderAudioRow('Bass', parts.bass, 'bass') : ''}
+          ${parts.full ? renderAudioRow('Full / Harm', parts.full, 'full') : ''}
         </div>
       `;
     } else {
-      // Legacy Single Track Rendering
       card.innerHTML = `
         <div class="track-header">
           <span class="track-title">${track.cleanName}</span>
@@ -152,6 +120,17 @@ function renderTracks(tracks) {
 
     container.appendChild(card);
   });
+}
+
+function renderAudioRow(label, filename, typeClass) {
+  return `
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span class="tag tag-${typeClass}" style="min-width: 80px; text-align: center;">${label}</span>
+      <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)" style="flex: 1;">
+        <source src="./Media/${encodeURIComponent(filename)}" type="audio/mpeg">
+      </audio>
+    </div>
+  `;
 }
 
 function setSeason(season, buttonEl) {
@@ -172,16 +151,13 @@ function applyFilters() {
   const searchInput = document.getElementById('searchInput');
   const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
-  // Active Liturgical Season key (e.g. 2026-27 or Ordinary Time)
-  const ACTIVE_SEASON = '2026-27';
-
   const filtered = allTracks.filter(track => {
     let matchesSeason = false;
-    
+
     if (currentSeason === 'all') {
       matchesSeason = true;
     } else if (currentSeason === 'current') {
-      matchesSeason = (track.season === ACTIVE_SEASON || track.season === 'Ordinary Time');
+      matchesSeason = (track.season === '2026-27' || track.season === '2026–27');
     } else {
       matchesSeason = (track.season === currentSeason);
     }
@@ -209,16 +185,36 @@ function applyFilters() {
 
   renderTracks(filtered);
 }
-window.addEventListener('DOMContentLoaded', () => {
-  loadTracks();
 
-  document.querySelectorAll('.season-btn').forEach(button => {
-    button.addEventListener('click', (e) => {
-      const seasonValue = e.target.getAttribute('onclick')
-        ? e.target.getAttribute('onclick').match(/'([^']+)'/)?.[1]
-        : e.target.getAttribute('data-season');
-
-      setSeason(seasonValue || 'all', e.target);
-    });
+function onTrackPlay(audioEl) {
+  document.querySelectorAll('audio').forEach(other => {
+    if (other !== audioEl) other.pause();
   });
+  document.querySelectorAll('.track-card').forEach(card => card.classList.remove('playing'));
+  if (audioEl.closest('.track-card')) {
+    audioEl.closest('.track-card').classList.add('playing');
+  }
+}
+
+function onTrackPause(audioEl) {
+  if (audioEl.closest('.track-card')) {
+    audioEl.closest('.track-card').classList.remove('playing');
+  }
+}
+
+// Check for search parameter passed from mass-schedule links
+function checkUrlSearchQuery() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchParam = urlParams.get('search');
+  if (searchParam) {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.value = searchParam;
+    }
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  checkUrlSearchQuery();
+  loadTracks();
 });
