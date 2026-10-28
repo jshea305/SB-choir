@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,51 +8,53 @@
   <link rel="stylesheet" href="css/styles.css">
   
   <!-- Link to the JS file inside the js/ directory -->
-  <script src="js/tracks.js"></script>
-  <!-- Main Page Navigation Bar -->
-
+  <script src="js/tracks.js" defer></script>
 </head>
-  
+
 <body>
-  
-<div class="header-banner">
+
+  <div class="header-banner">
     <img src="Media/church-and-parish-center.png" alt="St. Bernard Church & Parish Center">
   </div>
-<nav style="display: flex; gap: 12px; align-items: center; padding: 12px 0;">
-  <!-- Option 1: Standard Main Navigation Link -->
-  <a href="index.html" style="font-weight: 600; text-decoration: none; color: #1e293b;">
-    Practice Tracks
-  </a>
-  
-  <span style="color: #cbd5e1;">|</span>
-
-  <!-- Option 2: Styled Prominent Schedule Button -->
-  <a href="mass-schedule.html" style="background-color: #2563eb; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-    📅 Mass Schedule
-  </a>
-
-  <!-- Option 3: Quick Open in New Tab Link -->
-  <a href="mass-schedule.html" target="_blank" rel="noopener" style="font-size: 0.85rem; color: #64748b; text-decoration: underline;">
-    (Open in new tab ↗)
-  </a>
-</nav>
-  <header class="page-header">
-    <h1>Choir Practice Tracks</h1>
-    <p>St. Bernard Church • North Kingstown, RI</p>
-  </header>
 
   <main class="container">
+    <!-- Main Header & Navigation -->
+    <header class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+      <div>
+        <h1 style="margin: 0;">Choir Practice Tracks</h1>
+        <p style="margin: 4px 0 0 0; color: #64748b;">St. Bernard Church • North Kingstown, RI</p>
+      </div>
+
+      <!-- Unified Schedule Navigation Bar -->
+      <nav style="display: flex; gap: 12px; align-items: center;">
+        <a href="index.html" style="font-weight: 600; text-decoration: none; color: #1e293b;">
+          Practice Tracks
+        </a>
+        
+        <span style="color: #cbd5e1;">|</span>
+
+        <a href="mass-schedule.html" style="background-color: #2563eb; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+          📅 Mass Schedule
+        </a>
+
+        <a href="mass-schedule.html" target="_blank" rel="noopener" style="font-size: 0.85rem; color: #64748b; text-decoration: underline;">
+          (Open in new tab ↗)
+        </a>
+      </nav>
+    </header>
+
     <div class="control-panel">
-      <input type="text" id="searchInput" class="search-input" placeholder="Search track titles..." oninput="applyFilters()">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search track titles or composers..." oninput="applyFilters()">
       
-      <!-- Liturgical Season Filters -->
+      <!-- Liturgical Season Filters (Updated with "Current") -->
       <div class="filter-group">
         <span class="filter-label">Season:</span>
         <button class="filter-btn season-btn active" onclick="setSeason('all', this)">All</button>
-        <button class="season-btn" data-season="2026-27">2026–27 Season</button>
-        <button class="filter-btn season-btn" onclick="setSeason('Advent / Christmas', this)">Advent/Christmas</button>
-        <button class="filter-btn season-btn" onclick="setSeason('Lent / Easter', this)">Lent/Easter</button>
+        <button class="filter-btn season-btn" onclick="setSeason('current', this)" style="border: 2px solid #2563eb; font-weight: 700;">★ Current (2026–27)</button>
         <button class="filter-btn season-btn" onclick="setSeason('Ordinary Time', this)">Ordinary Time</button>
+        <button class="filter-btn season-btn" onclick="setSeason('Advent', this)">Advent</button>
+        <button class="filter-btn season-btn" onclick="setSeason('Christmas', this)">Christmas</button>
+        <button class="filter-btn season-btn" onclick="setSeason('Lent / Easter', this)">Lent/Easter</button>
       </div>
 
       <!-- Voice Category Filters -->
@@ -70,6 +71,9 @@
 
     <div id="track-list" class="track-list"></div>
   </main>
+
+</body>
+</html>
 
 
 
