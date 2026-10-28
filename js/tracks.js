@@ -3,10 +3,12 @@ let currentVoice = 'all';
 let allTracks = [];
 
 async function loadTracks() {
-  const container = document.getElementById('track-list');
-  if (!container) return;
+  const currentContainer = document.getElementById('current-tracks-list');
+  const archiveContainer = document.getElementById('archive-tracks-list');
 
-  container.innerHTML = '<div class="no-results">Loading practice tracks...</div>';
+  if (currentContainer) {
+    currentContainer.innerHTML = '<div class="no-results">Loading practice tracks...</div>';
+  }
 
   try {
     const response = await fetch('data/tracks.json');
@@ -14,7 +16,7 @@ async function loadTracks() {
     const rawData = await response.json();
 
     allTracks = rawData.map(item => {
-      // If item is a grouped song with a title
+      // Grouped track structure
       if (typeof item === 'object' && item.title) {
         return {
           isGrouped: true,
@@ -42,10 +44,21 @@ async function loadTracks() {
       };
     });
 
+    // 1. RENDER 2026-27 TRACKS AT THE TOP
+    const currentTracks = allTracks.filter(t => {
+      const s = (t.season || '').toString();
+      return s.includes('2026') || s === 'current';
+    });
+    renderTracksToContainer(currentTracks, 'current-tracks-list');
+
+    // 2. RENDER ARCHIVE TRACKS BELOW THE BUTTONS
     applyFilters();
+
   } catch (err) {
     console.error('Error loading tracks:', err);
-    container.innerHTML = '<div class="no-results" style="color:#dc2626;">Failed to load tracks. Ensure tracks.json exists in data directory.</div>';
+    if (currentContainer) {
+      currentContainer.innerHTML = '<div class="no-results" style="color:#dc2626;">Failed to load tracks. Ensure tracks.json exists in data directory.</div>';
+    }
   }
 }
 
@@ -58,8 +71,8 @@ function getCategory(filename) {
   return 'full';
 }
 
-function renderTracks(tracks) {
-  const container = document.getElementById('track-list');
+function renderTracksToContainer(tracks, containerId) {
+  const container = document.getElementById(containerId);
   if (!container) return;
 
   container.innerHTML = '';
@@ -151,54 +164,38 @@ function applyFilters() {
   const searchInput = document.getElementById('searchInput');
   const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
-  const filtered = allTracks.filter(track => {
-    const trackSeason = (track.season || '').toString().trim();
+  const archiveTracks = allTracks.filter(track => {
+    const s = (track.season || '').toString();
+    const isCurrent = s.includes('2026') || s === 'current';
+
+    // Keep top current tracks out of the bottom section unless explicitly searching or viewing 'all'
+    if (isCurrent && !query && currentSeason !== 'all') return false;
 
     let matchesSeason = false;
     if (currentSeason === 'all') {
       matchesSeason = true;
-    } else if (currentSeason === 'current' || currentSeason === '2026-27' || currentSeason === '2026–27') {
-      matchesSeason = (trackSeason === '2026-27' || trackSeason === '2026–27' || trackSeason.includes('2026'));
     } else {
-      matchesSeason = (trackSeason === currentSeason);
+      matchesSeason = (s === currentSeason);
     }
 
     let matchesVoice = true;
     if (currentVoice !== 'all') {
-      if (track.isGrouped) {
-        matchesVoice = Boolean(track.parts && track.parts[currentVoice]);
-      } else {
-        matchesVoice = (track.category === currentVoice);
-      }
+      matchesVoice = track.isGrouped 
+        ? Boolean(track.parts && track.parts[currentVoice]) 
+        : (track.category === currentVoice);
     }
 
     let matchesQuery = true;
     if (query) {
-      if (track.isGrouped) {
-        matchesQuery = (track.title && track.title.toLowerCase().includes(query)) || 
-                       (track.composer && track.composer.toLowerCase().includes(query));
-      } else {
-        matchesQuery = track.cleanName && track.cleanName.toLowerCase().includes(query);
-      }
+      matchesQuery = track.isGrouped
+        ? ((track.title && track.title.toLowerCase().includes(query)) || (track.composer && track.composer.toLowerCase().includes(query)))
+        : (track.cleanName && track.cleanName.toLowerCase().includes(query));
     }
 
     return matchesSeason && matchesVoice && matchesQuery;
   });
 
-  // FORCE CURRENT 2026-27 TRACKS TO THE TOP OF THE PAGE
-  filtered.sort((a, b) => {
-    const sA = (a.season || '').toString();
-    const sB = (b.season || '').toString();
-
-    const isACurrent = sA.includes('2026') || sA === 'current';
-    const isBCurrent = sB.includes('2026') || sB === 'current';
-
-    if (isACurrent && !isBCurrent) return -1;
-    if (!isACurrent && isBCurrent) return 1;
-    return 0;
-  });
-
-  renderTracks(filtered);
+  renderTracksToContainer(archiveTracks, 'archive-tracks-list');
 }
 
 function onTrackPlay(audioEl) {
@@ -217,7 +214,6 @@ function onTrackPause(audioEl) {
   }
 }
 
-// Check for search parameter passed from mass-schedule links
 function checkUrlSearchQuery() {
   const urlParams = new URLSearchParams(window.location.search);
   const searchParam = urlParams.get('search');
