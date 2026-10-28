@@ -309,3 +309,157 @@
     width: 100%;
   }
 }}
+/* ==========================================================================
+   Mass Schedule Styles
+   ========================================================================== */
+
+/* Key / Legend Card */
+.key-card {
+  background: #ffffff;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.key-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text, #1e293b);
+}
+
+.key-list {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.key-item span {
+  font-weight: 700;
+  background: #e2e8f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+/* Schedule Card Grid & Cards */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.mass-card {
+  background: #ffffff;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.mass-header {
+  border-bottom: 2px solid #2563eb;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.mass-date {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2563eb;
+}
+
+.mass-title {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Song Rows inside Mass Cards */
+.song-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.92rem;
+  gap: 8px;
+}
+
+.part-label {
+  font-weight: 600;
+  width: 90px;
+  color: #64748b;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.song-title {
+  flex: 1;
+  text-align: center;
+}
+
+.song-link {
+  background-color: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #bfdbfe;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.song-link:hover {
+  background-color: #fef08a;
+  color: #000000;
+  border-color: #fde047;
+}
+
+.hymnal-badge {
+  font-size: 0.8rem;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Single-Block Tester Controls */
+.test-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.ctrl-btn {
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ctrl-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.counter {
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.9rem;
+}
