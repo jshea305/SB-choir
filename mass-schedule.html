@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fall 2026 Mass Schedule</title>
-  <!-- Link to central stylesheet -->
+  <!-- Shared Stylesheet for the whole site -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-
+  
 <div class="container">
   <header>
     <h1 style="font-size: 1.4rem; margin:0;">Mass Block Tester</h1>
@@ -66,34 +66,6 @@
   </div>
 </div>
 
-<script>
-  let currentIndex = 0;
-  const cards = document.querySelectorAll('.mass-card');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const counter = document.getElementById('blockCounter');
-
-  function updateDisplay() {
-    cards.forEach((card, index) => {
-      card.classList.toggle('active', index === currentIndex);
-    });
-    counter.textContent = `Block ${currentIndex + 1} of ${cards.length}`;
-    prevBtn.disabled = currentIndex === 0;
-    nextBtn.disabled = currentIndex === cards.length - 1;
-  }
-
-  function changeBlock(direction) {
-    currentIndex += direction;
-    if (currentIndex < 0) currentIndex = 0;
-    if (currentIndex >= cards.length) currentIndex = cards.length - 1;
-    updateDisplay();
-  }
-
-  updateDisplay();
-</script>
-
-</body>
-</html>
-
+<script src="js/schedule.js"></script>
 </body>
 </html>
