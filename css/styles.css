@@ -463,3 +463,11 @@
   color: #64748b;
   font-size: 0.9rem;
 }
+/* Mass Schedule Single-Block Visibility */
+.mass-card {
+  display: none; /* Hide all blocks by default */
+}
+
+.mass-card.active {
+  display: block !important; /* Show only the active block */
+}
