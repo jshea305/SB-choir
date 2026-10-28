@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fall 2026 Mass Schedule</title>
+  <title>Mass Schedule Test Viewer</title>
   <style>
     :root {
       --bg: #f8fafc;
@@ -25,7 +25,7 @@
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 600px;
       margin: 0 auto;
     }
 
@@ -34,13 +34,6 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 1.75rem;
     }
 
     .nav-btn {
@@ -52,49 +45,52 @@
       font-weight: 600;
     }
 
-    /* Hymnal Key / Legend Card */
-    .key-card {
-      background: #f1f5f9;
+    /* Test Navigation Bar */
+    .test-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 12px 16px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .ctrl-btn {
+      background-color: #f1f5f9;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .ctrl-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .counter {
+      font-weight: 600;
+      color: var(--text-muted);
       font-size: 0.9rem;
     }
 
-    .key-title {
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-
-    .key-list {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .key-item span {
-      font-weight: 700;
-      background: #e2e8f0;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-    }
-
-    /* Grid Layout for Mass Blocks */
-    .schedule-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 20px;
-    }
-
+    /* Mass Card Styling */
     .mass-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      display: none; /* Hidden by default; JS shows active block */
+    }
+
+    .mass-card.active {
+      display: block;
     }
 
     .mass-header {
@@ -105,12 +101,12 @@
 
     .mass-date {
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       color: var(--primary);
     }
 
     .mass-title {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: var(--text-muted);
       font-style: italic;
     }
@@ -119,9 +115,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 6px 0;
-      border-bottom: 1px thin var(--border);
-      font-size: 0.92rem;
+      padding: 8px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.95rem;
+      gap: 8px;
     }
 
     .part-label {
@@ -130,9 +127,14 @@
       color: var(--text-muted);
       font-size: 0.82rem;
       text-transform: uppercase;
+      flex-shrink: 0;
     }
 
-    /* Highlighted Song Links */
+    .song-title {
+      flex: 1;
+      text-align: center;
+    }
+
     .song-link {
       background-color: var(--link-bg);
       color: var(--primary);
@@ -141,13 +143,6 @@
       padding: 3px 8px;
       border-radius: 4px;
       border: 1px solid #bfdbfe;
-      transition: all 0.2s;
-    }
-
-    .song-link:hover {
-      background-color: var(--highlight);
-      color: #000;
-      border-color: #fde047;
     }
 
     .hymnal-badge {
@@ -157,6 +152,7 @@
       padding: 2px 6px;
       border-radius: 4px;
       white-space: nowrap;
+      flex-shrink: 0;
     }
   </style>
 </head>
@@ -164,61 +160,89 @@
 
 <div class="container">
   <header>
-    <h1>Fall 2026 Mass Schedule</h1>
-    <a href="index.html" class="nav-btn">← Back to Practice Tracks</a>
+    <h1 style="font-size: 1.4rem; margin:0;">Mass Block Tester</h1>
+    <a href="index.html" class="nav-btn">← Practice Tracks</a>
   </header>
 
-  <!-- Key / Legend Section -->
-  <div class="key-card">
-    <div class="key-title">📖 Hymnal Key & References</div>
-    <div class="key-list">
-      <div class="key-item"><span>Tm</span> Today's Missal</div>
-      <div class="key-item"><span>Cp</span> Choral Praise</div>
-      <div class="key-item"><span>R+A</span> Responsorial & Gospel Acclamation</div>
-    </div>
+  <!-- Controls to step through one block at a time -->
+  <div class="test-controls">
+    <button id="prevBtn" class="ctrl-btn" onclick="changeBlock(-1)">← Previous</button>
+    <span id="blockCounter" class="counter">Block 1 of 14</span>
+    <button id="nextBtn" class="ctrl-btn" onclick="changeBlock(1)">Next →</button>
   </div>
 
-  <div class="schedule-grid">
-    <!-- Example Mass Card with Highlighted Song Links -->
-    <div class="mass-card">
+  <div id="blockContainer">
+
+    <!-- Block 1 -->
+    <div class="mass-card active">
       <div class="mass-header">
         <div class="mass-date">September 5th/6th</div>
         <div class="mass-title">23rd Sunday in Ordinary Time</div>
       </div>
-
-      <div class="song-row">
-        <span class="part-label">Entrance</span>
-        <a href="index.html?search=Gather+The+People" class="song-link">Gather The People</a>
-        <span class="hymnal-badge">Tm 305</span>
-      </div>
-
-      <div class="song-row">
-        <span class="part-label">Psalm</span>
-        <span>If Today You Hear His....</span>
-        <span class="hymnal-badge">R+A</span>
-      </div>
-
-      <div class="song-row">
-        <span class="part-label">Gifts</span>
-        <a href="index.html?search=Companions+On+The" class="song-link">Companions On The Journey</a>
-        <span class="hymnal-badge">Tm 459</span>
-      </div>
-
-      <div class="song-row">
-        <span class="part-label">Communion</span>
-        <a href="index.html?search=Spirit+and+Grace" class="song-link">Spirit and Grace</a>
-        <span class="hymnal-badge">Tm 350</span>
-      </div>
-
-      <div class="song-row">
-        <span class="part-label">Going Forth</span>
-        <a href="index.html?search=Take+The+Word" class="song-link">Take The Word of God</a>
-        <span class="hymnal-badge">Tm 384</span>
-      </div>
+      <div class="song-row"><span class="part-label">Entrance</span><span class="song-title"><a href="index.html?search=Gather+The+People" class="song-link">Gather The People</a></span><span class="hymnal-badge">Tm 305</span></div>
+      <div class="song-row"><span class="part-label">Psalm</span><span class="song-title">If Today You Hear His....</span><span class="hymnal-badge">R+A</span></div>
+      <div class="song-row"><span class="part-label">Gifts</span><span class="song-title"><a href="index.html?search=Companions+On+The" class="song-link">Companions On The Journey</a></span><span class="hymnal-badge">Tm 459</span></div>
+      <div class="song-row"><span class="part-label">Communion</span><span class="song-title"><a href="index.html?search=Spirit+and+Grace" class="song-link">Spirit and Grace</a></span><span class="hymnal-badge">Tm 350</span></div>
+      <div class="song-row"><span class="part-label">Going Forth</span><span class="song-title"><a href="index.html?search=Take+The+Word" class="song-link">Take The Word of God</a></span><span class="hymnal-badge">Tm 384</span></div>
     </div>
-    
+
+    <!-- Block 2 -->
+    <div class="mass-card">
+      <div class="mass-header">
+        <div class="mass-date">September 12th/13th</div>
+        <div class="mass-title">24th Sunday in Ordinary Time</div>
+      </div>
+      <div class="song-row"><span class="part-label">Entrance</span><span class="song-title"><a href="index.html?search=Gather+Us+In" class="song-link">Gather Us In</a></span><span class="hymnal-badge">Tm 320</span></div>
+      <div class="song-row"><span class="part-label">Psalm</span><span class="song-title">The Lord Is Kind....</span><span class="hymnal-badge">R+A</span></div>
+      <div class="song-row"><span class="part-label">Gifts</span><span class="song-title"><a href="index.html?search=Prayer+Of+St.+Francis" class="song-link">Prayer Of St. Francis</a></span><span class="hymnal-badge">Tm 473</span></div>
+      <div class="song-row"><span class="part-label">Communion</span><span class="song-title"><a href="index.html?search=Loving+and+Forgiving" class="song-link">Loving and Forgiving</a></span><span class="hymnal-badge">Tm 663</span></div>
+      <div class="song-row"><span class="part-label">Going Forth</span><span class="song-title"><a href="index.html?search=Blest+Be+The+Lord" class="song-link">Blest Be The Lord</a></span><span class="hymnal-badge">Tm 455</span></div>
+    </div>
+
+    <!-- Block 3 -->
+    <div class="mass-card">
+      <div class="mass-header">
+        <div class="mass-date">September 19th/20th</div>
+        <div class="mass-title">25th Sunday in Ordinary Time</div>
+      </div>
+      <div class="song-row"><span class="part-label">Entrance</span><span class="song-title"><a href="index.html?search=Table+Of+Plenty" class="song-link">Table Of Plenty</a></span><span class="hymnal-badge">Tm 312</span></div>
+      <div class="song-row"><span class="part-label">Psalm</span><span class="song-title">The Lord is Near....</span><span class="hymnal-badge">R+A</span></div>
+      <div class="song-row"><span class="part-label">Gifts</span><span class="song-title"><a href="index.html?search=The+Servant+Song" class="song-link">The Servant Song</a></span><span class="hymnal-badge">Tm 383</span></div>
+      <div class="song-row"><span class="part-label">Communion</span><span class="song-title"><a href="index.html?search=One+Bread+One+Body" class="song-link">One Bread One Body</a></span><span class="hymnal-badge">Tm 327</span></div>
+      <div class="song-row"><span class="part-label">Going Forth</span><span class="song-title"><a href="index.html?search=With+One+Voice" class="song-link">With One Voice</a></span><span class="hymnal-badge">Tm 392</span></div>
+    </div>
+
   </div>
 </div>
+
+<script>
+  let currentIndex = 0;
+  const cards = document.querySelectorAll('.mass-card');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('blockCounter');
+
+  function updateDisplay() {
+    cards.forEach((card, index) => {
+      card.classList.toggle('active', index === currentIndex);
+    });
+    counter.textContent = `Block ${currentIndex + 1} of ${cards.length}`;
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === cards.length - 1;
+  }
+
+  function changeBlock(direction) {
+    currentIndex += direction;
+    if (currentIndex < 0) currentIndex = 0;
+    if (currentIndex >= cards.length) currentIndex = cards.length - 1;
+    updateDisplay();
+  }
+
+  updateDisplay();
+</script>
+
+</body>
+</html>
 
 </body>
 </html>
