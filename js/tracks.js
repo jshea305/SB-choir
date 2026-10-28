@@ -156,7 +156,7 @@ function applyFilters() {
 
     if (currentSeason === 'all') {
       matchesSeason = true;
-    } else if (currentSeason === 'current') {
+    } else if (currentSeason === 'current' || currentSeason === '2026-27' || currentSeason === '2026–27') {
       matchesSeason = (track.season === '2026-27' || track.season === '2026–27');
     } else {
       matchesSeason = (track.season === currentSeason);
@@ -183,7 +183,7 @@ function applyFilters() {
     return matchesSeason && matchesVoice && matchesQuery;
   });
 
-  // SORTING LOGIC: Put 2026-27 / 2026–27 season tracks at the very top
+  // FORCE CURRENT 2026-27 TRACKS TO THE TOP OF THE PAGE
   filtered.sort((a, b) => {
     const isACurrent = (a.season === '2026-27' || a.season === '2026–27');
     const isBCurrent = (b.season === '2026-27' || b.season === '2026–27');
