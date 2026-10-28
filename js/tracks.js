@@ -172,8 +172,19 @@ function applyFilters() {
   const searchInput = document.getElementById('searchInput');
   const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
+  // Active Liturgical Season key (e.g. 2026-27 or Ordinary Time)
+  const ACTIVE_SEASON = '2026-27';
+
   const filtered = allTracks.filter(track => {
-    const matchesSeason = (currentSeason === 'all' || track.season === currentSeason);
+    let matchesSeason = false;
+    
+    if (currentSeason === 'all') {
+      matchesSeason = true;
+    } else if (currentSeason === 'current') {
+      matchesSeason = (track.season === ACTIVE_SEASON || track.season === 'Ordinary Time');
+    } else {
+      matchesSeason = (track.season === currentSeason);
+    }
 
     let matchesVoice = true;
     if (currentVoice !== 'all') {
@@ -198,23 +209,6 @@ function applyFilters() {
 
   renderTracks(filtered);
 }
-
-function onTrackPlay(audioEl) {
-  document.querySelectorAll('audio').forEach(other => {
-    if (other !== audioEl) other.pause();
-  });
-  document.querySelectorAll('.track-card').forEach(card => card.classList.remove('playing'));
-  if (audioEl.closest('.track-card')) {
-    audioEl.closest('.track-card').classList.add('playing');
-  }
-}
-
-function onTrackPause(audioEl) {
-  if (audioEl.closest('.track-card')) {
-    audioEl.closest('.track-card').classList.remove('playing');
-  }
-}
-
 window.addEventListener('DOMContentLoaded', () => {
   loadTracks();
 
