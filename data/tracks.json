@@ -320,7 +320,6 @@
     }
   },
  {
-    "id": "angels-carol",
     "title": "Angels' Carol",
     "composer": "John Rutter",
     "season": "2026-27",
@@ -332,4 +331,16 @@
       "bass": "Angels Carol Bass.mp3"
     }
   }
+{
+  "title": "He is Born",
+  "composer": "",
+  "season": "Christmas",
+  "youtubeUrl": null,
+  "parts": {
+    "soprano": "He is Born Sop .mp3",
+    "alto": "He is Born alto.mp3",
+    "tenor": "He is Born Tenor .mp3",
+    "bass": "He is Born Bass .mp3"
+  }
+},
 ]
