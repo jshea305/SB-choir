@@ -152,20 +152,21 @@ function applyFilters() {
   const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
   const filtered = allTracks.filter(track => {
-    let matchesSeason = false;
+    const trackSeason = (track.season || '').toString().trim();
 
+    let matchesSeason = false;
     if (currentSeason === 'all') {
       matchesSeason = true;
     } else if (currentSeason === 'current' || currentSeason === '2026-27' || currentSeason === '2026–27') {
-      matchesSeason = (track.season === '2026-27' || track.season === '2026–27');
+      matchesSeason = (trackSeason === '2026-27' || trackSeason === '2026–27' || trackSeason.includes('2026'));
     } else {
-      matchesSeason = (track.season === currentSeason);
+      matchesSeason = (trackSeason === currentSeason);
     }
 
     let matchesVoice = true;
     if (currentVoice !== 'all') {
       if (track.isGrouped) {
-        matchesVoice = Boolean(track.parts[currentVoice]);
+        matchesVoice = Boolean(track.parts && track.parts[currentVoice]);
       } else {
         matchesVoice = (track.category === currentVoice);
       }
@@ -174,9 +175,10 @@ function applyFilters() {
     let matchesQuery = true;
     if (query) {
       if (track.isGrouped) {
-        matchesQuery = track.title.toLowerCase().includes(query) || track.composer.toLowerCase().includes(query);
+        matchesQuery = (track.title && track.title.toLowerCase().includes(query)) || 
+                       (track.composer && track.composer.toLowerCase().includes(query));
       } else {
-        matchesQuery = track.cleanName.toLowerCase().includes(query);
+        matchesQuery = track.cleanName && track.cleanName.toLowerCase().includes(query);
       }
     }
 
@@ -185,8 +187,11 @@ function applyFilters() {
 
   // FORCE CURRENT 2026-27 TRACKS TO THE TOP OF THE PAGE
   filtered.sort((a, b) => {
-    const isACurrent = (a.season === '2026-27' || a.season === '2026–27');
-    const isBCurrent = (b.season === '2026-27' || b.season === '2026–27');
+    const sA = (a.season || '').toString();
+    const sB = (b.season || '').toString();
+
+    const isACurrent = sA.includes('2026') || sA === 'current';
+    const isBCurrent = sB.includes('2026') || sB === 'current';
 
     if (isACurrent && !isBCurrent) return -1;
     if (!isACurrent && isBCurrent) return 1;
