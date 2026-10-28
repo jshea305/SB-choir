@@ -8,8 +8,16 @@ function updateDisplay() {
 
   if (!cards.length) return;
 
+  // Make sure index stays within bounds
+  if (currentIndex < 0) currentIndex = 0;
+  if (currentIndex >= cards.length) currentIndex = cards.length - 1;
+
   cards.forEach((card, index) => {
-    card.classList.toggle('active', index === currentIndex);
+    if (index === currentIndex) {
+      card.classList.add('active');
+    } else {
+      card.classList.remove('active');
+    }
   });
 
   if (counter) {
@@ -24,10 +32,7 @@ function updateDisplay() {
 }
 
 function changeBlock(direction) {
-  const cards = document.querySelectorAll('.mass-card');
   currentIndex += direction;
-  if (currentIndex < 0) currentIndex = 0;
-  if (currentIndex >= cards.length) currentIndex = cards.length - 1;
   updateDisplay();
 }
 
