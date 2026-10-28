@@ -14,20 +14,46 @@
     <img src="Media/SBC.jpg" alt="St. Bernard Church Choir Header">
   </div>
 
-<!-- Main Header & Navigation -->
-    <header class="page-header" style="text-align: center; margin-bottom: 16px;">
-      <div class="header-titles">
-        <h1 style="font-size: 1.25rem; margin: 0; line-height: 1.2; color: #0f172a;">Choir Practice Tracks</h1>
-        <p style="margin: 2px 0 0; font-size: 0.75rem; color: #64748b;">St. Bernard Church • North Kingstown, RI</p>
+<main class="container">
+  
+  <!-- 1. EXISTING HEADER -->
+  <header class="page-header" style="text-align: center; margin-bottom: 16px;">
+    ...
+  </header>
+
+  <!-- ==================================================== -->
+  <!-- PASTE THE NEW SEASONAL MENU SECTION RIGHT HERE 👇 -->
+  <!-- ==================================================== -->
+  <section id="seasonal-menu">
+    <h2 style="font-size: 1.05rem; color: #334155; margin-bottom: 8px;">Browse Repertoire by Liturgical Season</h2>
+    <div class="season-grid">
+      
+      <!-- Advent -->
+      <div class="season-card advent" onclick="setSeason('Advent')">
+        <div class="season-title">Advent</div>
+        <div class="season-desc">Preparation and expectation leading to Christmas.</div>
       </div>
 
-      <!-- Navigation Bar stacked below title -->
-      <nav class="nav-bar" style="display: flex; justify-content: center; align-items: center; gap: 6px; font-size: 0.8rem; margin-top: 6px;">
-        <span class="nav-link active" style="font-weight: 600; color: #1e293b;">Practice Tracks</span>
-        <span class="nav-divider" style="color: #94a3b8;">|</span>
-        <a href="mass-schedule.html" class="nav-btn-mass" style="color: #2563eb; text-decoration: none; font-weight: 600;">📅 Mass Schedule</a>
-      </nav>
-    </header>
+      <!-- Christmas -->
+      <div class="season-card christmas" onclick="setSeason('Christmas')">
+        <div class="season-title">Christmas</div>
+        <div class="season-desc">Nativity of the Lord, Epiphany, and Holy Family.</div>
+      </div>
+
+      <!-- Lent -->
+      <div class="season-card lent" onclick="setSeason('Lent/Easter')">
+        <div class="season-title">Lent</div>
+        <div class="season-desc">Ash Wednesday through Holy Week penance.</div>
+      </div>
+      
+    <-- Ordinary Time -->
+      <div class="season-card ordinary" onclick="setSeason('Ordinary Time')">
+        <div class="season-title">Ordinary Time</div>
+        <div class="season-desc">Ordered Sunday celebrations throughout the year.</div>
+      </div>
+
+    </div>
+  </section>
 
     <!-- 1. TOP SECTION: CURRENT 2026-27 TRACKS -->
     <section id="current-tracks-section" style="margin-bottom: 30px;">
