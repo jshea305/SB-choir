@@ -400,4 +400,154 @@ header p.subtitle {
   border-radius: 4px;
   white-space: nowrap;
   flex-shrink: 0;
+}/* ==========================================================================
+   Mass Schedule Specific Styles
+   ========================================================================== */
+
+/* Page Header Link */
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+/* Hymnal Key Legend */
+.hymnal-key-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 1.25rem 0 1.75rem 0;
+  padding: 0 1rem;
+}
+
+.hymnal-key-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  background-color: #ffffff;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--radius, 12px);
+  padding: 0.75rem 1.5rem;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.05));
+}
+
+.key-label {
+  font-weight: 700;
+  color: #1e3a8a;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.key-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.key-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 6px;
+  background-color: #eef2ff;
+  color: #1e40af;
+}
+
+.key-text {
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+/* Schedule Cards & 3-Column Grid */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.weekend-card {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--radius, 12px);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.05));
+}
+
+.card-header {
+  border-bottom: 2px solid #2563eb;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.card-header h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1e40af;
+  margin: 0;
+}
+
+.liturgical-title {
+  font-size: 0.85rem;
+  color: var(--text-muted, #64748b);
+  font-style: italic;
+  margin-top: 0.15rem;
+}
+
+.song-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.song-item {
+  display: grid;
+  grid-template-columns: 110px 1fr 80px;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #f1f5f9;
+  gap: 8px;
+}
+
+.song-item:last-child {
+  border-bottom: none;
+}
+
+.part-name {
+  font-weight: 700;
+  color: #1e40af;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.song-title {
+  color: #0f172a;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.hymnal-ref {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  text-align: right;
+  white-space: nowrap;
 }
