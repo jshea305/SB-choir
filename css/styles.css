@@ -354,7 +354,7 @@ header p.subtitle {
   font-size: 0.95rem;
 }
 
-/* Force each song item into its own row with flexbox alignment */
+/* Force each song item into its own row with flexbox alignment js*/
 .song-list {
   display: flex;
   flex-direction: column;
@@ -401,5 +401,3 @@ header p.subtitle {
   white-space: nowrap;
   flex-shrink: 0;
 }
-
-
