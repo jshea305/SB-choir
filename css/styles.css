@@ -508,18 +508,23 @@
     font-size: 1.8rem;
   }
 }
-.hymnal-key-card {
+/* Wrapper to force true center alignment */
+.hymnal-key-wrapper {
+  width: 100%;
   display: flex;
+  justify-content: center;
+  margin: 20px 0 30px 0;
+}
+
+.hymnal-key-card {
+  display: inline-flex;
   align-items: center;
-  justify-content: center; /* Centers items horizontally inside the card */
-  gap: 20px;
-  max-width: 900px; /* Limits width so it doesn't stretch edge-to-edge */
-  margin: 20px auto 30px auto; /* Centers the card horizontally with top/bottom spacing */
-  padding: 14px 24px; /* Balanced vertical and horizontal inner padding */
+  gap: 18px;
   background-color: #ffffff;
   border: 1px solid #e1e8ed;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+  padding: 10px 24px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
   font-family: inherit;
 }
 
@@ -534,8 +539,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 18px;
+  gap: 16px;
 }
 
 .key-item {
@@ -546,7 +550,7 @@
 
 .badge {
   display: inline-block;
-  padding: 4px 10px;
+  padding: 3px 8px;
   font-size: 12px;
   font-weight: 600;
   border-radius: 6px;
@@ -564,7 +568,7 @@
 @media (max-width: 640px) {
   .hymnal-key-card {
     flex-direction: column;
-    padding: 16px;
-    gap: 12px;
+    align-items: flex-start;
+    gap: 10px;
   }
 }
