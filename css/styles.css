@@ -217,6 +217,7 @@
       color: var(--text-muted);
       padding: 2rem;
       font-style: italic;
+    }
     /* Navigation Bar */
 .main-nav {
   background-color: var(--card-bg);
@@ -308,7 +309,7 @@
     display: block;
     width: 100%;
   }
-}
+
 /* ==========================================================================
    Mass Schedule Styles
    ========================================================================== */
@@ -507,25 +508,27 @@
   .header-titles h1 {
     font-size: 1.8rem;
   }
-}
-/* Wrapper to force true center alignment */
+/* ==========================================================================
+   Hymnal Key Centered Styling
+   ========================================================================== */
+
 .hymnal-key-wrapper {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  display: flex !important;
+  justify-content: center !important;
   margin: 20px 0 30px 0;
+  clear: both;
 }
 
 .hymnal-key-card {
-  display: inline-flex;
-  align-items: center;
-  gap: 18px;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 18px !important;
   background-color: #ffffff;
   border: 1px solid #e1e8ed;
   border-radius: 10px;
   padding: 10px 24px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
-  font-family: inherit;
 }
 
 .key-label {
@@ -536,16 +539,16 @@
 }
 
 .key-items {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 16px;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 16px !important;
 }
 
 .key-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
 }
 
 .badge {
@@ -562,13 +565,4 @@
 .key-text {
   font-size: 13.5px;
   color: #374151;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 640px) {
-  .hymnal-key-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
 }
