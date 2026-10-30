@@ -229,115 +229,7 @@ audio {
    Hymnal Key & Mass Schedule Styles
    ========================================================================== */
 
-.hymnal-key-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin: 1.25rem 0 1.75rem 0;
-  padding: 0 0.5rem;
-}
-
-.hymnal-key-card {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  background-color: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0.75rem 1.25rem;
-  box-shadow: var(--shadow-sm);
-  max-width: 100%;
-}
-
-.key-label {
-  font-weight: 700;
-  color: #1e3a8a;
-  font-size: 0.85rem;
-  white-space: nowrap;
-}
-
-.key-items {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.key-item {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.badge {
-  display: inline-block;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  border-radius: 6px;
-  background-color: #eef2ff;
-  color: #1e40af;
-}
-
-.key-text {
-  font-size: 0.8rem;
-  color: #374151;
-}
-
-/* Schedule Grid */
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.weekend-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
-  box-shadow: var(--shadow-sm);
-}
-
-/* ==========================================================================
-   Mobile Responsive Adjustments
-   ========================================================================== */
-
-@media (max-width: 640px) {
-  body {
-    padding-bottom: 1.5rem;
-  }
-
-  .header-banner {
-    padding: 0 0.5rem;
-  }
-
-  .container {
-    padding: 0 0.75rem;
-  }
-
-  .filter-group {
-    justify-content: flex-start;
-  }
-
-  .filter-btn {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.75rem;
-  }
-
-  .hymnal-key-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.6rem;
-    width: 100%;
-  }
-
-  .grid-container {
-    grid-template-columns: 1fr;
-    padding: /* Header alignment */
+/* Page Header */
 header {
   text-align: center;
   margin-bottom: 24px;
@@ -354,57 +246,6 @@ header p.subtitle {
   font-size: 0.95rem;
 }
 
-/* Force each song item into its own row with flexbox alignment js*/
-.song-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.song-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
-  border-bottom: 1px solid #f1f5f9;
-  font-size: 0.88rem;
-  gap: 8px;
-}
-
-.song-item:last-child {
-  border-bottom: none;
-}
-
-.part-name {
-  font-weight: 700;
-  width: 95px;
-  color: #1e40af;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  flex-shrink: 0;
-}
-
-.song-title {
-  flex: 1;
-  color: #0f172a;
-  font-weight: 500;
-}
-
-.hymnal-ref {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #475569;
-  background: #f1f5f9;
-  padding: 2px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}/* ==========================================================================
-   Mass Schedule Specific Styles
-   ========================================================================== */
-
-/* Page Header Link */
 .home-link {
   display: inline-flex;
   align-items: center;
@@ -471,7 +312,7 @@ header p.subtitle {
   color: #374151;
 }
 
-/* Schedule Cards & 3-Column Grid */
+/* Schedule Cards & Grid Layout */
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -509,6 +350,7 @@ header p.subtitle {
   margin-top: 0.15rem;
 }
 
+/* Song List Layout */
 .song-list {
   display: flex;
   flex-direction: column;
@@ -518,7 +360,7 @@ header p.subtitle {
 
 .song-item {
   display: grid;
-  grid-template-columns: 110px 1fr 80px;
+  grid-template-columns: 100px 1fr auto;
   align-items: center;
   padding: 6px 0;
   border-bottom: 1px solid #f1f5f9;
@@ -548,6 +390,45 @@ header p.subtitle {
   font-size: 0.8rem;
   font-weight: 600;
   color: #475569;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
   text-align: right;
   white-space: nowrap;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 640px) {
+  body {
+    padding-bottom: 1.5rem;
+  }
+
+  .header-banner {
+    padding: 0 0.5rem;
+  }
+
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .filter-group {
+    justify-content: flex-start;
+  }
+
+  .filter-btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .hymnal-key-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  .grid-container {
+    grid-template-columns: 1fr;
+    padding: 0 0.5rem;
+  }
 }
