@@ -500,15 +500,9 @@ header p.subtitle {
 }
 
 .dress-col {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #1e40af;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  padding: 3px 8px;
-  border-radius: 6px;
-  text-align: center;
-  white-space: nowrap;
+color: #0f172a;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 /* Mobile responsive tweak */
