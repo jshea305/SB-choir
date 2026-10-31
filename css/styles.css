@@ -469,7 +469,7 @@ header p.subtitle {
 
 /* 4-Column Grid: Date | Time | Event | Dress Code */
 .date-item {
-  display: grid;
+  display: flex;
   grid-template-columns: 130px 90px 1fr 120px;
   align-items: center;
   padding: 6px 0;
@@ -503,6 +503,7 @@ header p.subtitle {
 color: #0f172a;
   font-weight: 500;
   font-size: 0.95rem;
+  white-space: nowrap;
 }
 
 /* Mobile responsive tweak */
