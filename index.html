@@ -64,32 +64,32 @@
   </div>
 </section>
 
-    <!-- 2. MIDDLE SECTION: SEARCH & FILTER CONTROLS -->
-    <section id="archive-filter-section" style="padding-top: 20px; border-top: 2px dashed #cbd5e1; margin-bottom: 24px;">
-      <h2 style="font-size: 1.15rem; color: #334155; margin-bottom: 12px;">Archive & Track Search</h2>
-      <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search track titles or composers..." oninput="applyFilters()" />
+  <!-- 2. MIDDLE SECTION: SEARCH & FILTER CONTROLS -->
+<section id="archive-filter-section" class="search-section-card">
+  <h2 style="font-size: 1.15rem; color: #334155; margin-bottom: 12px;">Archive & Track Search</h2>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search track titles or composers..." oninput="applyFilters()" />
 
-        <div class="filter-group">
-          <span class="filter-label">SEASON:</span>
-          <button class="filter-btn season-btn active" onclick="setSeason('all', this)">All Seasons</button>
-          <button class="filter-btn season-btn" onclick="setSeason('Ordinary Time', this)">Ordinary Time</button>
-          <button class="filter-btn season-btn" onclick="setSeason('Advent', this)">Advent</button>
-          <button class="filter-btn season-btn" onclick="setSeason('Christmas', this)">Christmas</button>
-          <button class="filter-btn season-btn" onclick="setSeason('Lent/Easter', this)">Lent/Easter</button>
-        </div>
+    <div class="filter-group">
+      <span class="filter-label">SEASON:</span>
+      <button class="filter-btn season-btn active" onclick="setSeason('all', this)">All Seasons</button>
+      <button class="filter-btn season-btn" onclick="setSeason('Ordinary Time', this)">Ordinary Time</button>
+      <button class="filter-btn season-btn" onclick="setSeason('Advent', this)">Advent</button>
+      <button class="filter-btn season-btn" onclick="setSeason('Christmas', this)">Christmas</button>
+      <button class="filter-btn season-btn" onclick="setSeason('Lent/Easter', this)">Lent/Easter</button>
+    </div>
 
-        <div class="filter-group">
-          <span class="filter-label">VOICE:</span>
-          <button class="filter-btn voice-btn active" onclick="setVoice('all', this)">All</button>
-          <button class="filter-btn voice-btn" onclick="setVoice('soprano', this)">Soprano</button>
-          <button class="filter-btn voice-btn" onclick="setVoice('alto', this)">Alto</button>
-          <button class="filter-btn voice-btn" onclick="setVoice('tenor', this)">Tenor</button>
-          <button class="filter-btn voice-btn" onclick="setVoice('bass', this)">Bass</button>
-          <button class="filter-btn voice-btn" onclick="setVoice('full', this)">Full / Instrumental</button>
-        </div>
-      </div>
-    </section>
+    <div class="filter-group">
+      <span class="filter-label">VOICE:</span>
+      <button class="filter-btn voice-btn active" onclick="setVoice('all', this)">All</button>
+      <button class="filter-btn voice-btn" onclick="setVoice('soprano', this)">Soprano</button>
+      <button class="filter-btn voice-btn" onclick="setVoice('alto', this)">Alto</button>
+      <button class="filter-btn voice-btn" onclick="setVoice('tenor', this)">Tenor</button>
+      <button class="filter-btn voice-btn" onclick="setVoice('bass', this)">Bass</button>
+      <button class="filter-btn voice-btn" onclick="setVoice('full', this)">Full / Instrumental</button>
+    </div>
+  </div>
+</section>
 
     <!-- 3. BOTTOM SECTION: ARCHIVE TRACKS -->
     <section id="archive-tracks-section">
