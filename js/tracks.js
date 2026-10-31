@@ -229,3 +229,29 @@ window.addEventListener('DOMContentLoaded', () => {
   checkUrlSearchQuery();
   loadTracks();
 });
+
+
+function hidePastEvents() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  document.querySelectorAll('[data-date]').forEach(item => {
+    const eventDateStr = item.getAttribute('data-date');
+    if (!eventDateStr) return;
+
+    // Parses "YYYY-MM-DD" in local time
+    const eventDate = new Date(eventDateStr + 'T00:00:00');
+
+    // Sets target date to the day AFTER the event
+    const dayAfterEvent = new Date(eventDate);
+    dayAfterEvent.setDate(dayAfterEvent.getDate() + 1);
+
+    // Hides the element once today reaches or exceeds the day after
+    if (today >= dayAfterEvent) {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Run automatically on page load
+window.addEventListener('DOMContentLoaded', hidePastEvents);
