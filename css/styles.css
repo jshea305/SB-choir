@@ -469,8 +469,8 @@ header p.subtitle {
 
 /* 4-Column Grid: Date | Time | Event | Dress Code */
 .date-item {
-  display: flex;
-  grid-template-columns: 130px 90px 1fr 120px;
+  display: grid;
+ grid-template-columns: max-content max-content auto auto;
   align-items: center;
   padding: 6px 0;
   border-bottom: 1px solid #f1f5f9;
@@ -485,18 +485,21 @@ header p.subtitle {
   font-weight: 700;
   color: #1e40af;
   font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 .time-col {
   font-weight: 600;
   color: #475569;
   font-size: 0.85rem;
+  white-space: nowrap;
 }
 
 .event-col {
   color: #0f172a;
   font-weight: 500;
   font-size: 0.95rem;
+  white-space: nowrap;
 }
 
 .dress-col {
@@ -506,10 +509,28 @@ color: #0f172a;
   white-space: nowrap;
 }
 
-/* Mobile responsive tweak */
+/* Mobile responsive styling for narrow viewports */
 @media (max-width: 640px) {
   .date-item {
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    grid-template-columns: auto 1fr;
+    row-gap: 4px;
+    column-gap: 10px;
+    padding: 10px 0;
+  }
+
+  .date-col {
+    grid-column: 1;
+  }
+
+  .time-col {
+    grid-column: 2;
+  }
+
+  .event-col {
+    grid-column: 1;
+  }
+
+  .dress-col {
+    grid-column: 2;
   }
 }
