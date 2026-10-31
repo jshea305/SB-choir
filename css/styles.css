@@ -432,3 +432,89 @@ header p.subtitle {
     padding: 0 0.5rem;
   }
 }
+
+/* Important Dates Layout */
+.important-dates-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0 0 1.5rem 0;
+  padding: 0 1rem;
+}
+
+.important-dates-card {
+  width: 100%;
+  max-width: 800px;
+  background-color: #ffffff;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--radius, 12px);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.05));
+}
+
+.important-dates-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 0.75rem;
+  border-bottom: 2px solid #2563eb;
+  padding-bottom: 0.35rem;
+}
+
+.dates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 4-Column Grid: Date | Time | Event | Dress Code */
+.date-item {
+  display: grid;
+  grid-template-columns: 130px 90px 1fr 120px;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #f1f5f9;
+  gap: 12px;
+}
+
+.date-item:last-child {
+  border-bottom: none;
+}
+
+.date-col {
+  font-weight: 700;
+  color: #1e40af;
+  font-size: 0.9rem;
+}
+
+.time-col {
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.85rem;
+}
+
+.event-col {
+  color: #0f172a;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.dress-col {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1e40af;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Mobile responsive tweak */
+@media (max-width: 640px) {
+  .date-item {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+}
