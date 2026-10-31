@@ -44,10 +44,10 @@ async function loadTracks() {
       };
     });
 
-    // 1. RENDER 2026-27 TRACKS AT THE TOP
+ // 1. RENDER CURRENT TRACKS AT THE TOP
     const currentTracks = allTracks.filter(t => {
       const s = (t.season || '').toString();
-      return s.includes('2026') || s === 'current';
+      return s === 'current';
     });
     renderTracksToContainer(currentTracks, 'current-tracks-list');
 
