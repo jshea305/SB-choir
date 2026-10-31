@@ -169,7 +169,8 @@ function applyFilters() {
     const isCurrent = s.includes('2026') || s === 'current';
 
     // Keep top current tracks out of the bottom section unless explicitly searching or viewing 'all'
-    if (isCurrent && !query && currentSeason !== 'all') return false;
+    // if (isCurrent && !query && currentSeason !== 'all') return false; jshea 10/31/2026
+    if (isCurrent) return false;
 
     let matchesSeason = false;
     if (currentSeason === 'all') {
