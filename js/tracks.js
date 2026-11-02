@@ -1,5 +1,6 @@
-// 1. Create a single shared audio instance globally
+// 1. Create a single shared audio instance globally for iOS WebKit
 const globalAudio = new Audio();
+let currentlyPlayingBtn = null;
 
 // 2. Unlock the WebKit audio context on the user's very first tap on the page
 function unlockIOSAudio() {
@@ -7,7 +8,6 @@ function unlockIOSAudio() {
         globalAudio.pause(); // Immediately pause after unlocking
     }).catch(() => {});
     
-    // Remove the listeners once unlocked
     document.removeEventListener('touchstart', unlockIOSAudio);
     document.removeEventListener('click', unlockIOSAudio);
 }
@@ -15,16 +15,54 @@ function unlockIOSAudio() {
 document.addEventListener('touchstart', unlockIOSAudio);
 document.addEventListener('click', unlockIOSAudio);
 
-// 3. When a choir member clicks a track button, assign the source to the unlocked instance
-function playTrack(trackUrl) {
-    globalAudio.src = trackUrl;
-    globalAudio.load(); // Forces iOS WebKit to reset the stream buffer
+// 3. Play / Pause toggle function routing through globalAudio
+function playTrack(trackUrl, buttonEl) {
+    if (!trackUrl) return;
+
+    // Convert relative path if needed
+    const fullUrl = trackUrl.startsWith('.') || trackUrl.startsWith('/') 
+        ? trackUrl 
+        : `./Media/${encodeURIComponent(trackUrl)}`;
+
+    // If tapping the active track, toggle play/pause
+    if (globalAudio.src.endsWith(encodeURIComponent(trackUrl)) || globalAudio.src === fullUrl) {
+        if (!globalAudio.paused) {
+            globalAudio.pause();
+            if (buttonEl) buttonEl.innerText = buttonEl.innerText.replace('⏸', '▶');
+            return;
+        }
+    }
+
+    // Reset previous button UI if another track was playing
+    if (currentlyPlayingBtn && currentlyPlayingBtn !== buttonEl) {
+        currentlyPlayingBtn.innerText = currentlyPlayingBtn.innerText.replace('⏸', '▶');
+        currentlyPlayingBtn.classList.remove('playing');
+    }
+
+    // Assign source and stream via globalAudio
+    globalAudio.src = fullUrl;
+    globalAudio.load();
     
     const playPromise = globalAudio.play();
     if (playPromise !== undefined) {
-        playPromise.catch(error => console.error("iOS Playback error:", error));
+        playPromise.then(() => {
+            currentlyPlayingBtn = buttonEl;
+            if (buttonEl) {
+                buttonEl.innerText = buttonEl.innerText.replace('▶', '⏸');
+                buttonEl.classList.add('playing');
+            }
+        }).catch(error => console.error("iOS Playback error:", error));
     }
 }
+
+// Global listener to clean up UI when track finishes playing
+globalAudio.addEventListener('ended', () => {
+    if (currentlyPlayingBtn) {
+        currentlyPlayingBtn.innerText = currentlyPlayingBtn.innerText.replace('⏸', '▶');
+        currentlyPlayingBtn.classList.remove('playing');
+        currentlyPlayingBtn = null;
+    }
+});
 
 
 let currentSeason = 'all';
@@ -45,7 +83,6 @@ async function loadTracks() {
     const rawData = await response.json();
 
     allTracks = rawData.map(item => {
-      // Grouped track structure
       if (typeof item === 'object' && item.title) {
         return {
           isGrouped: true,
@@ -59,7 +96,6 @@ async function loadTracks() {
         };
       }
 
-      // Legacy flat track structure
       const filename = typeof item === 'string' ? item : (item.name || 'Untitled');
       const season = typeof item === 'object' && item.season ? item.season : 'Ordinary Time';
 
@@ -73,14 +109,12 @@ async function loadTracks() {
       };
     });
 
- // 1. RENDER CURRENT TRACKS AT THE TOP
     const currentTracks = allTracks.filter(t => {
       const s = (t.season || '').toString();
       return s === 'current';
     });
     renderTracksToContainer(currentTracks, 'current-tracks-list');
 
-    // 2. RENDER ARCHIVE TRACKS BELOW THE BUTTONS
     applyFilters();
 
   } catch (err) {
@@ -154,9 +188,9 @@ function renderTracksToContainer(tracks, containerId) {
             <span class="tag tag-${track.category}">${track.category}</span>
           </div>
         </div>
-        <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)">
-          <source src="${track.path}" type="audio/mpeg">
-        </audio>
+        <button class="voice-play-btn tag-${track.category}" onclick="playTrack('${track.path}', this)" style="padding: 8px 16px; font-weight: 600; cursor: pointer; border-radius: 4px; border: none;">
+          ▶ Play Track
+        </button>
       `;
     }
 
@@ -168,9 +202,9 @@ function renderAudioRow(label, filename, typeClass) {
   return `
     <div style="display: flex; align-items: center; gap: 10px;">
       <span class="tag tag-${typeClass}" style="min-width: 80px; text-align: center;">${label}</span>
-      <audio controls preload="none" onplay="onTrackPlay(this)" onpause="onTrackPause(this)" style="flex: 1;">
-        <source src="./Media/${encodeURIComponent(filename)}" type="audio/mpeg">
-      </audio>
+      <button class="voice-play-btn tag-${typeClass}" onclick="playTrack('${filename}', this)" style="flex: 1; padding: 8px 12px; text-align: left; font-weight: 600; cursor: pointer; border-radius: 4px; border: none;">
+        ▶ Play ${label}
+      </button>
     </div>
   `;
 }
@@ -197,8 +231,6 @@ function applyFilters() {
     const s = (track.season || '').toString();
     const isCurrent = s.includes('2026') || s === 'current';
 
-    // Keep top current tracks out of the bottom section unless explicitly searching or viewing 'all'
-    // if (isCurrent && !query && currentSeason !== 'all') return false; jshea 10/31/2026
     if (isCurrent) return false;
 
     let matchesSeason = false;
@@ -228,22 +260,6 @@ function applyFilters() {
   renderTracksToContainer(archiveTracks, 'archive-tracks-list');
 }
 
-function onTrackPlay(audioEl) {
-  document.querySelectorAll('audio').forEach(other => {
-    if (other !== audioEl) other.pause();
-  });
-  document.querySelectorAll('.track-card').forEach(card => card.classList.remove('playing'));
-  if (audioEl.closest('.track-card')) {
-    audioEl.closest('.track-card').classList.add('playing');
-  }
-}
-
-function onTrackPause(audioEl) {
-  if (audioEl.closest('.track-card')) {
-    audioEl.closest('.track-card').classList.remove('playing');
-  }
-}
-
 function checkUrlSearchQuery() {
   const urlParams = new URLSearchParams(window.location.search);
   const searchParam = urlParams.get('search');
@@ -260,7 +276,6 @@ window.addEventListener('DOMContentLoaded', () => {
   loadTracks();
 });
 
-
 function hidePastEvents() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -269,19 +284,15 @@ function hidePastEvents() {
     const eventDateStr = item.getAttribute('data-date');
     if (!eventDateStr) return;
 
-    // Parses "YYYY-MM-DD" in local time
     const eventDate = new Date(eventDateStr + 'T00:00:00');
 
-    // Sets target date to the day AFTER the event
     const dayAfterEvent = new Date(eventDate);
     dayAfterEvent.setDate(dayAfterEvent.getDate() + 1);
 
-    // Hides the element once today reaches or exceeds the day after
     if (today >= dayAfterEvent) {
       item.style.display = 'none';
     }
   });
 }
 
-// Run automatically on page load
 window.addEventListener('DOMContentLoaded', hidePastEvents);
