@@ -1,3 +1,32 @@
+// 1. Create a single shared audio instance globally
+const globalAudio = new Audio();
+
+// 2. Unlock the WebKit audio context on the user's very first tap on the page
+function unlockIOSAudio() {
+    globalAudio.play().then(() => {
+        globalAudio.pause(); // Immediately pause after unlocking
+    }).catch(() => {});
+    
+    // Remove the listeners once unlocked
+    document.removeEventListener('touchstart', unlockIOSAudio);
+    document.removeEventListener('click', unlockIOSAudio);
+}
+
+document.addEventListener('touchstart', unlockIOSAudio);
+document.addEventListener('click', unlockIOSAudio);
+
+// 3. When a choir member clicks a track button, assign the source to the unlocked instance
+function playTrack(trackUrl) {
+    globalAudio.src = trackUrl;
+    globalAudio.load(); // Forces iOS WebKit to reset the stream buffer
+    
+    const playPromise = globalAudio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(error => console.error("iOS Playback error:", error));
+    }
+}
+
+
 let currentSeason = 'all';
 let currentVoice = 'all';
 let allTracks = [];
