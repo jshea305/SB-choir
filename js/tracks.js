@@ -17,6 +17,8 @@ async function loadAndRenderTracks() {
     // 1. Sort all tracks alphabetically
     allTracks.sort((a, b) => getTrackTitle(a).localeCompare(getTrackTitle(b)));
 
+   // Add this log line right above line 21:
+console.log("Loaded tracks array:", allTracks); 
     // 2. Separate Current Rehearsal vs Archived Library
     const currentTracks = allTracks.filter(t => t.status === 'current');
     renderCurrentSection(currentTracks);
