@@ -15,7 +15,7 @@ async function loadAndRenderTracks() {
     allTracks = await response.json();
 
     // 1. Sort all tracks alphabetically
-    allTracks.sort((a, b) => getTrackTitle(a).localeCompare(getTrackTitle(b)));
+   allTracks.sort((a, b) => getTrackTitle(a).localeCompare(getTrackTitle(b), undefined, { sensitivity: 'base' }));
 
    // Add this log line right above line 21:
 console.log("Loaded tracks array:", allTracks); 
