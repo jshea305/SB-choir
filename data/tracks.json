@@ -292,5 +292,18 @@
   { "name": "With A Voice Of Singing-soprano.mp3", "season": "Ordinary Time", "status": "archived" },
   { "name": "With A Voice Of Singing-tenor.mp3", "season": "Ordinary Time", "status": "archived" },
   { "name": "Worthy is the Lamb.mp3", "season": "Lent / Easter", "status": "archived" },
-  { "name": "Yearning Soprano.mp3", "season": "Advent / Christmas", "status": "archived" }
+  { "name": "Yearning Soprano.mp3", "season": "Advent / Christmas", "status": "archived" },
+  { "name": "Soprano Waiting In Silence.mp3", "season": "Advent / Christmas", "status": "current" },
+  { "name": "Alto Waiting In Silence.mp3", "season": "Advent / Christmas", "status": "current" },
+  { "name": "Ten Bass Waiting In Silence.mp3", "season": "Advent / Christmas", "status": "current" },
+  { "title": "Waiting in Silence (Full Recording)", "season": "Advent / Christmas", "status": "current", "youtubeUrl": "https://www.youtube.com/watch?v=ajwzC0JbYnE" },
+  { "name": "Soprano Psalm 24 Lord This Is The People.mp3", "season": "Ordinary Time", "status": "archived" },
+  { "name": "Alto Psalm 24 Lord This Is The People.mp3", "season": "Ordinary Time", "status": "archived" },
+  { "name": "Psalm 24 Tenor Lord This Is The People.mp3", "season": "Ordinary Time", "status": "archived" },
+  { "name": "Bass Psalm 24 Lord This Is The People.mp3", "season": "Ordinary Time", "status": "archived" },
+  { "title": "Psalm 24 Lord This Is The People (Full Recording)", "season": "Ordinary Time", "status": "archived", "youtubeUrl": "https://www.youtube.com/watch?v=wZrtkD6OxIU" },
+  { "title": "My Soul in Stillness Waits", "season": "Advent / Christmas", "status": "current", "youtubeUrl": "https://youtu.be/X5d6Ngf-nDM?si=ihzId2DftzgVnAtT" },
+  { "title": "Hymn to Christ the King - Sarah Hart", "season": "Ordinary Time", "status": "current", "youtubeUrl": "https://youtu.be/7dKX1AKohEA?si=HQTE0FKY_7ROE2mh" },
+  { "title": "Maranatha", "season": "Advent / Christmas", "status": "current", "youtubeUrl": "https://youtu.be/4JMIycj7wHg?si=KaOj4UDqYDstK8ab" }
+
 ]
