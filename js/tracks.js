@@ -7,7 +7,7 @@ function getTrackTitle(track) {
 
 async function loadAndRenderTracks() {
   try {
-    const response = await fetch('./tracks.json');
+    const response = await fetch('./data/tracks.json?v=' + Date.now());
     const tracks = await response.json();
 
     // 1. Sort all tracks alphabetically by title
