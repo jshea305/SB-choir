@@ -1,298 +1,68 @@
-// 1. Create a single shared audio instance globally for iOS WebKit
-const globalAudio = new Audio();
-let currentlyPlayingBtn = null;
-
-// 2. Unlock the WebKit audio context on the user's very first tap on the page
-function unlockIOSAudio() {
-    globalAudio.play().then(() => {
-        globalAudio.pause(); // Immediately pause after unlocking
-    }).catch(() => {});
-    
-    document.removeEventListener('touchstart', unlockIOSAudio);
-    document.removeEventListener('click', unlockIOSAudio);
+// Helper to get display title regardless of whether track is MP3 or YouTube
+function getTrackTitle(track) {
+  if (track.title) return track.title;
+  if (track.name) return track.name.replace(/\.mp3$/i, '').trim();
+  return '';
 }
 
-document.addEventListener('touchstart', unlockIOSAudio);
-document.addEventListener('click', unlockIOSAudio);
-
-// 3. Play / Pause toggle function routing through globalAudio
-function playTrack(trackUrl, buttonEl) {
-    if (!trackUrl) return;
-
-    // Convert relative path if needed
-    const fullUrl = trackUrl.startsWith('.') || trackUrl.startsWith('/') 
-        ? trackUrl 
-        : `./Media/${encodeURIComponent(trackUrl)}`;
-
-    // If tapping the active track, toggle play/pause
-    if (globalAudio.src.endsWith(encodeURIComponent(trackUrl)) || globalAudio.src === fullUrl) {
-        if (!globalAudio.paused) {
-            globalAudio.pause();
-            if (buttonEl) buttonEl.innerText = buttonEl.innerText.replace('⏸', '▶');
-            return;
-        }
-    }
-
-    // Reset previous button UI if another track was playing
-    if (currentlyPlayingBtn && currentlyPlayingBtn !== buttonEl) {
-        currentlyPlayingBtn.innerText = currentlyPlayingBtn.innerText.replace('⏸', '▶');
-        currentlyPlayingBtn.classList.remove('playing');
-    }
-
-    // Assign source and stream via globalAudio
-    globalAudio.src = fullUrl;
-    globalAudio.load();
-    
-    const playPromise = globalAudio.play();
-    if (playPromise !== undefined) {
-        playPromise.then(() => {
-            currentlyPlayingBtn = buttonEl;
-            if (buttonEl) {
-                buttonEl.innerText = buttonEl.innerText.replace('▶', '⏸');
-                buttonEl.classList.add('playing');
-            }
-        }).catch(error => console.error("iOS Playback error:", error));
-    }
-}
-
-// Global listener to clean up UI when track finishes playing
-globalAudio.addEventListener('ended', () => {
-    if (currentlyPlayingBtn) {
-        currentlyPlayingBtn.innerText = currentlyPlayingBtn.innerText.replace('⏸', '▶');
-        currentlyPlayingBtn.classList.remove('playing');
-        currentlyPlayingBtn = null;
-    }
-});
-
-
-let currentSeason = 'all';
-let currentVoice = 'all';
-let allTracks = [];
-
-async function loadTracks() {
-  const currentContainer = document.getElementById('current-tracks-list');
-  const archiveContainer = document.getElementById('archive-tracks-list');
-
-  if (currentContainer) {
-    currentContainer.innerHTML = '<div class="no-results">Loading practice tracks...</div>';
-  }
-
+async function loadAndRenderTracks() {
   try {
-    const response = await fetch('data/tracks.json');
-    if (!response.ok) throw new Error('tracks.json not found');
-    const rawData = await response.json();
+    const response = await fetch('./tracks.json');
+    const tracks = await response.json();
 
-    allTracks = rawData.map(item => {
-      if (typeof item === 'object' && item.title) {
-        return {
-          isGrouped: true,
-          title: item.title,
-          composer: item.composer || '',
-          voicing: item.voicing || '',
-          liturgicalUse: item.liturgicalUse || '',
-          season: item.season || 'Ordinary Time',
-          youtubeUrl: item.youtubeUrl || null,
-          parts: item.parts || {}
-        };
-      }
+    // 1. Sort all tracks alphabetically by title
+    tracks.sort((a, b) => getTrackTitle(a).localeCompare(getTrackTitle(b)));
 
-      const filename = typeof item === 'string' ? item : (item.name || 'Untitled');
-      const season = typeof item === 'object' && item.season ? item.season : 'Ordinary Time';
+    // 2. Separate into Current Rehearsal vs Archived Library
+    const currentTracks = tracks.filter(t => t.status === 'current');
+    const archivedTracks = tracks.filter(t => t.status === 'archived');
 
-      return {
-        isGrouped: false,
-        name: filename,
-        cleanName: filename.replace(/\.mp3$/i, ''),
-        category: getCategory(filename),
-        season: season,
-        path: `./Media/${encodeURIComponent(filename)}`
-      };
-    });
+    // 3. Render Top "Current Rehearsal" Block
+    renderCurrentSection(currentTracks);
 
-    const currentTracks = allTracks.filter(t => {
-      const s = (t.season || '').toString();
-      return s === 'current';
-    });
-    renderTracksToContainer(currentTracks, 'current-tracks-list');
-
-    applyFilters();
+    // 4. Render Main Archive Library
+    renderArchiveSection(archivedTracks);
 
   } catch (err) {
-    console.error('Error loading tracks:', err);
-    if (currentContainer) {
-      currentContainer.innerHTML = '<div class="no-results" style="color:#dc2626;">Failed to load tracks. Ensure tracks.json exists in data directory.</div>';
-    }
+    console.error('Failed to load tracks.json:', err);
   }
 }
 
-function getCategory(filename) {
-  const lower = filename.toLowerCase();
-  if (lower.includes('soprano') || lower.includes('sop2') || lower.includes('sop')) return 'soprano';
-  if (lower.includes('alto')) return 'alto';
-  if (lower.includes('tenor')) return 'tenor';
-  if (lower.includes('bass')) return 'bass';
-  return 'full';
-}
+// Render helper for line items (handles both MP3 play buttons and YouTube links)
+function renderTrackRow(track) {
+  const title = getTrackTitle(track);
+  let actionButton = '';
 
-function renderTracksToContainer(tracks, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  container.innerHTML = '';
-
-  if (tracks.length === 0) {
-    container.innerHTML = '<div class="no-results">No practice tracks match your search filters.</div>';
-    return;
-  }
-
-  tracks.forEach(track => {
-    const card = document.createElement('div');
-    card.className = 'track-card';
-
-    if (track.isGrouped) {
-      const parts = track.parts;
-      card.innerHTML = `
-        <div class="track-header" style="flex-direction: column; align-items: flex-start; gap: 4px;">
-          <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-            <span class="track-title" style="font-size: 1.2rem; font-weight: 700;">${track.title}</span>
-            <div class="tag-container">
-              <span class="tag tag-season">${track.season}</span>
-              ${track.voicing ? `<span class="tag">${track.voicing}</span>` : ''}
-            </div>
-          </div>
-          ${track.composer ? `<div style="font-size: 0.85rem; color: #64748b; font-style: italic;">by ${track.composer}</div>` : ''}
-        </div>
-
-        ${track.youtubeUrl ? `
-          <div style="margin: 10px 0;">
-            <a href="${track.youtubeUrl}" target="_blank" rel="noopener" class="link-btn youtube-btn" style="background: #ff0000; color: #fff; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 0.85rem; display: inline-block;">
-              ▶ Listen to Full Recording on YouTube
-            </a>
-          </div>
-        ` : ''}
-
-        <div class="parts-list" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-          ${parts.soprano ? renderAudioRow('Soprano', parts.soprano, 'soprano') : ''}
-          ${parts.alto ? renderAudioRow('Alto', parts.alto, 'alto') : ''}
-          ${parts.tenor ? renderAudioRow('Tenor', parts.tenor, 'tenor') : ''}
-          ${parts.bass ? renderAudioRow('Bass', parts.bass, 'bass') : ''}
-          ${parts.full ? renderAudioRow('Full / Harm', parts.full, 'full') : ''}
-        </div>
-      `;
-    } else {
-      card.innerHTML = `
-        <div class="track-header">
-          <span class="track-title">${track.cleanName}</span>
-          <div class="tag-container">
-            <span class="tag tag-season">${track.season}</span>
-            <span class="tag tag-${track.category}">${track.category}</span>
-          </div>
-        </div>
-        <button class="voice-play-btn tag-${track.category}" onclick="playTrack('${track.path}', this)" style="padding: 8px 16px; font-weight: 600; cursor: pointer; border-radius: 4px; border: none;">
-          ▶ Play Track
-        </button>
-      `;
-    }
-
-    container.appendChild(card);
-  });
-}
-
-function renderAudioRow(label, filename, typeClass) {
-  return `
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <span class="tag tag-${typeClass}" style="min-width: 80px; text-align: center;">${label}</span>
-      <button class="voice-play-btn tag-${typeClass}" onclick="playTrack('${filename}', this)" style="flex: 1; padding: 8px 12px; text-align: left; font-weight: 600; cursor: pointer; border-radius: 4px; border: none;">
-        ▶ Play ${label}
+  if (track.youtubeUrl) {
+    // Red YouTube Link Button
+    actionButton = `
+      <a href="${track.youtubeUrl}" target="_blank" rel="noopener noreferrer" 
+         style="background: #dc2626; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+        ▶ YouTube
+      </a>
+    `;
+  } else if (track.name) {
+    // Audio MP3 Play Button
+    actionButton = `
+      <button onclick="playAudio('${track.name}')" 
+              style="background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">
+        ▶ Play
       </button>
+    `;
+  }
+
+  return `
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid #f3f4f6;">
+      <div>
+        <span style="font-weight: 600; color: #1f2937;">${title}</span>
+        <span style="font-size: 0.75rem; font-weight: 700; color: #6b7280; margin-left: 8px; text-transform: uppercase;">(${track.season})</span>
+      </div>
+      <div>
+        ${actionButton}
+      </div>
     </div>
   `;
 }
 
-function setSeason(season, buttonEl) {
-  currentSeason = season;
-  document.querySelectorAll('.season-btn').forEach(btn => btn.classList.remove('active'));
-  if (buttonEl) buttonEl.classList.add('active');
-  applyFilters();
-}
-
-function setVoice(voice, buttonEl) {
-  currentVoice = voice;
-  document.querySelectorAll('.voice-btn').forEach(btn => btn.classList.remove('active'));
-  if (buttonEl) buttonEl.classList.add('active');
-  applyFilters();
-}
-
-function applyFilters() {
-  const searchInput = document.getElementById('searchInput');
-  const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-
-  const archiveTracks = allTracks.filter(track => {
-    const s = (track.season || '').toString();
-    const isCurrent = s.includes('2026') || s === 'current';
-
-    if (isCurrent) return false;
-
-    let matchesSeason = false;
-    if (currentSeason === 'all') {
-      matchesSeason = true;
-    } else {
-      matchesSeason = (s === currentSeason);
-    }
-
-    let matchesVoice = true;
-    if (currentVoice !== 'all') {
-      matchesVoice = track.isGrouped 
-        ? Boolean(track.parts && track.parts[currentVoice]) 
-        : (track.category === currentVoice);
-    }
-
-    let matchesQuery = true;
-    if (query) {
-      matchesQuery = track.isGrouped
-        ? ((track.title && track.title.toLowerCase().includes(query)) || (track.composer && track.composer.toLowerCase().includes(query)))
-        : (track.cleanName && track.cleanName.toLowerCase().includes(query));
-    }
-
-    return matchesSeason && matchesVoice && matchesQuery;
-  });
-
-  renderTracksToContainer(archiveTracks, 'archive-tracks-list');
-}
-
-function checkUrlSearchQuery() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const searchParam = urlParams.get('search');
-  if (searchParam) {
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-      searchInput.value = searchParam;
-    }
-  }
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  checkUrlSearchQuery();
-  loadTracks();
-});
-
-function hidePastEvents() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  document.querySelectorAll('[data-date]').forEach(item => {
-    const eventDateStr = item.getAttribute('data-date');
-    if (!eventDateStr) return;
-
-    const eventDate = new Date(eventDateStr + 'T00:00:00');
-
-    const dayAfterEvent = new Date(eventDate);
-    dayAfterEvent.setDate(dayAfterEvent.getDate() + 1);
-
-    if (today >= dayAfterEvent) {
-      item.style.display = 'none';
-    }
-  });
-}
-
-window.addEventListener('DOMContentLoaded', hidePastEvents);
+// Run loader on page ready
+document.addEventListener('DOMContentLoaded', loadAndRenderTracks);
