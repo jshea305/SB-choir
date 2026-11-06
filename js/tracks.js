@@ -32,6 +32,7 @@ console.log("Loaded tracks array:", allTracks);
 }
 
 function renderCurrentSection(tracks) {
+  const header = `<h2 style="text-align: center; margin: 20px 0 10px 0; font-size: 1.3rem; font-weight: 600; color: #1e293b;">Current Songs to work on:</h2>`;
   const container = document.getElementById('current-tracks-list');
   if (!container) return;
 
@@ -40,7 +41,7 @@ function renderCurrentSection(tracks) {
     return;
   }
 
-  container.innerHTML = tracks.map(track => renderTrackRow(track)).join('');
+ container.innerHTML = header + tracks.map(track => renderTrackRow(track)).join('');
 }
 
 function renderArchiveSection(tracks) {
