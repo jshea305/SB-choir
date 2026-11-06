@@ -121,7 +121,7 @@
       <button type="button" class="copy-btn" onclick="copyOutput()">📋 Copy Code to Clipboard</button>
     </div>
   </div>
-
+<script>
 function generateJSON() {
   const title = document.getElementById('title').value.trim();
   const composer = document.getElementById('composer').value.trim();
@@ -160,6 +160,6 @@ function generateJSON() {
   const outputText = ",\n" + entries.map(item => JSON.stringify(item, null, 2)).join(",\n");
   document.getElementById('jsonOutput').value = outputText;
 }
-
+</script>
 </body>
 </html>
