@@ -122,55 +122,44 @@
     </div>
   </div>
 
-  <script>
-  function generateJSON() {
-    const title = document.getElementById('title').value.trim();
-    const composer = document.getElementById('composer').value.trim();
-    const season = document.getElementById('season').value;
-    const youtubeUrl = document.getElementById('youtubeUrl').value.trim();
+function generateJSON() {
+  const title = document.getElementById('title').value.trim();
+  const composer = document.getElementById('composer').value.trim();
+  const season = document.getElementById('season').value;
+  const youtubeUrl = document.getElementById('youtubeUrl').value.trim();
 
-    const parts = [
-      document.getElementById('soprano').value.trim(),
-      document.getElementById('alto').value.trim(),
-      document.getElementById('tenor').value.trim(),
-      document.getElementById('bass').value.trim()
-    ].filter(Boolean);
+  const parts = [
+    document.getElementById('soprano').value.trim(),
+    document.getElementById('alto').value.trim(),
+    document.getElementById('tenor').value.trim(),
+    document.getElementById('bass').value.trim()
+  ].filter(Boolean);
 
-    if (!title) {
-      document.getElementById('jsonOutput').value = "// Enter a song title above to generate JSON...";
-      return;
-    }
-
-    const entries = [];
-
-    // 1. MP3 entries matching flat JSON schema
-    parts.forEach(fileName => {
-      const entry = { title: title, name: fileName, status: "current", season: season };
-      if (composer) entry.composer = composer;
-      entries.push(entry);
-    });
-
-    // 2. YouTube entry if link is present
-    if (youtubeUrl) {
-      const ytEntry = { title: title, youtubeUrl: youtubeUrl, status: "current", season: season };
-      if (composer) ytEntry.composer = composer;
-      entries.push(ytEntry);
-    }
-
-    // Output formatted JSON array items
-    const outputText = ",\n" + entries.map(item => JSON.stringify(item, null, 2)).join(",\n");
-    document.getElementById('jsonOutput').value = outputText;
+  if (!title) {
+    document.getElementById('jsonOutput').value = "// Enter a song title above to generate JSON...";
+    return;
   }
 
-  function copyOutput() {
-    const textarea = document.getElementById('jsonOutput');
-    textarea.select();
-    document.execCommand('copy');
-    alert('Copied to clipboard! Paste it right before the final ] bracket in data/tracks.json');
+  const entries = [];
+
+  // Generate flat MP3 entries for tracks.json
+  parts.forEach(fileName => {
+    const entry = { title: title, name: fileName, status: "current", season: season };
+    if (composer) entry.composer = composer;
+    entries.push(entry);
+  });
+
+  // Generate YouTube entry if present
+  if (youtubeUrl) {
+    const ytEntry = { title: title, youtubeUrl: youtubeUrl, status: "current", season: season };
+    if (composer) ytEntry.composer = composer;
+    entries.push(ytEntry);
   }
 
-  generateJSON();
-</script>
+  // Format clean JSON output with leading comma
+  const outputText = ",\n" + entries.map(item => JSON.stringify(item, null, 2)).join(",\n");
+  document.getElementById('jsonOutput').value = outputText;
+}
 
 </body>
 </html>
