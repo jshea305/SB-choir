@@ -57,6 +57,7 @@ function renderArchiveSection(tracks) {
 
 function renderTrackRow(track) {
   const title = getTrackTitle(track);
+  const fileLabel = track.name ? ` (${track.name.replace(/\.mp3$/i, '')})` : '';
   let actionButton = '';
 
   if (track.youtubeUrl) {
@@ -78,7 +79,7 @@ function renderTrackRow(track) {
   return `
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid #f3f4f6;">
       <div>
-        <span style="font-weight: 600; color: #1f2937;">${title}</span>
+       <span style="font-weight: 600; color: #1f2937;">${title}${fileLabel}</span>
         ${track.season ? `<span style="font-size: 0.75rem; font-weight: 700; color: #6b7280; margin-left: 8px; text-transform: uppercase;">(${track.season})</span>` : ''}
       </div>
       <div>
