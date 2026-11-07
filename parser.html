@@ -1,40 +1,140 @@
-<script>
-  function parseLine() {
-    const input = document.getElementById('lineInput').value.trim();
-    const season = document.getElementById('seasonSelect').value;
-    const status = document.getElementById('statusSelect').value;
-
-    if (!input) {
-      document.getElementById('jsonOutput').value = '';
-      return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Single-Line Track JSON Parser</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
     }
+    .card {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    h2 { margin-top: 0; color: #1e293b; font-size: 1.25rem; }
+    label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #475569; }
+    input[type="text"], select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      margin-bottom: 12px;
+    }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    textarea {
+      width: 100%;
+      height: 140px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      box-sizing: border-box;
+      background: #0f172a;
+      color: #38bdf8;
+      margin-top: 10px;
+    }
+    .copy-btn {
+      background: #16a34a;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+    .copy-btn:hover { background: #15803d; }
+  </style>
+</head>
+<body>
 
-    const isUrl = input.startsWith('http://') || input.startsWith('https://');
+  <div class="card">
+    <h2>🎵 Single-Line Track JSON Parser</h2>
     
-    let title = '';
-    let name = '';
+    <label>Paste MP3 Filename or YouTube URL:</label>
+    <input type="text" id="lineInput" placeholder="e.g. waiting in vain alto.mp3" oninput="parseLine()" />
 
-    if (isUrl) {
-      title = "Full Recording";
-    } else {
-      // Ensure name keeps the full filename with .mp3 extension
-      name = input.endsWith('.mp3') ? input : `${input}.mp3`;
+    <div class="grid">
+      <div>
+        <label>Season:</label>
+        <select id="seasonSelect" onchange="parseLine()">
+          <option value="Ordinary Time">Ordinary Time</option>
+          <option value="Advent / Christmas">Advent / Christmas</option>
+          <option value="Lent / Easter">Lent / Easter</option>
+        </select>
+      </div>
+      <div>
+        <label>Status:</label>
+        <select id="statusSelect" onchange="parseLine()">
+          <option value="current">current</option>
+          <option value="archived">archived</option>
+        </select>
+      </div>
+    </div>
+
+    <label style="margin-top: 12px;">Formatted JSON Output:</label>
+    <textarea id="jsonOutput" readonly></textarea>
+    <button type="button" class="copy-btn" onclick="copyOutput()">📋 Copy Code to Clipboard</button>
+  </div>
+
+  <script>
+    function parseLine() {
+      const input = document.getElementById('lineInput').value.trim();
+      const season = document.getElementById('seasonSelect').value;
+      const status = document.getElementById('statusSelect').value;
+
+      if (!input) {
+        document.getElementById('jsonOutput').value = '';
+        return;
+      }
+
+      const isUrl = input.startsWith('http://') || input.startsWith('https://');
       
-      // Strip .mp3 extension and voice prefixes/suffixes (alto, tenor, bass, soprano) for title
-      title = name
-        .replace(/\.mp3$/i, '')
-        .replace(/\b(soprano|alto|tenor|bass|ten bass|baritone)\b/gi, '')
-        .trim();
+      let title = '';
+      let name = '';
+
+      if (isUrl) {
+        title = "Full Recording";
+      } else {
+        name = input.endsWith('.mp3') ? input : `${input}.mp3`;
+        title = name
+          .replace(/\.mp3$/i, '')
+          .replace(/\b(soprano|alto|tenor|bass|ten bass|baritone)\b/gi, '')
+          .trim();
+      }
+
+      const entry = { title: title };
+      
+      if (name) entry.name = name;
+      if (isUrl) entry.youtubeUrl = input;
+      
+      entry.season = season;
+      entry.status = status;
+
+      document.getElementById('jsonOutput').value = ",\n" + JSON.stringify(entry, null, 2);
     }
 
-    const entry = { title: title };
-    
-    if (name) entry.name = name;
-    if (isUrl) entry.youtubeUrl = input;
-    
-    entry.season = season;
-    entry.status = status;
+    function copyOutput() {
+      const textarea = document.getElementById('jsonOutput');
+      textarea.select();
+      document.execCommand('copy');
+      alert('Copied to clipboard!');
+    }
+  </script>
 
-    document.getElementById('jsonOutput').value = ",\n" + JSON.stringify(entry, null, 2);
-  }
-</script>
+</body>
+</html>
