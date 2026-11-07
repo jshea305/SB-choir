@@ -2,194 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Track Entry Helper - St. Bernard Choir</title>
+  <title>Single-Line Track JSON Parser</title>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f8fafc;
-      color: #0f172a;
-      max-width: 680px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-    .card {
-      background: #ffffff;
-      padding: 24px;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
-    h2 { margin-top: 0; color: #1e293b; font-size: 1.25rem; }
-    .form-group { margin-bottom: 16px; }
-    label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #475569; }
-    input[type="text"], select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      box-sizing: border-box;
-    }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .parts-box {
-      background: #f1f5f9;
-      padding: 14px;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-    button {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      font-size: 0.95rem;
-      margin-top: 12px;
-    }
-    button:hover { background: #1d4ed8; }
-    textarea {
-      width: 100%;
-      height: 160px;
-      font-family: monospace;
-      font-size: 0.85rem;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #cbd5e1;
-      box-sizing: border-box;
-      background: #0f172a;
-      color: #38bdf8;
-      margin-top: 12px;
-    }
-    .copy-btn {
-      background: #16a34a;
-      margin-top: 8px;
-    }
-    .copy-btn:hover { background: #15803d; }
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
+    input { width: 100%; padding: 10px; font-size: 1rem; box-sizing: border-box; }
+    textarea { width: 100%; height: 120px; font-family: monospace; background: #0f172a; color: #38bdf8; margin-top: 15px; padding: 10px; box-sizing: border-box; }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h2>🎵 Track JSON Entry Generator</h2>
-    
-    <div class="form-group">
-      <label>Song Title *</label>
-      <input type="text" id="title" placeholder="e.g., My Soul in Stillness Waits" oninput="generateJSON()" />
-    </div>
+  <h3>Single-Line Track JSON Parser</h3>
+  <p><small>Format: <code>Title, MP3 Filename or YouTube URL, Season</code></small></p>
 
-    <div class="grid-2">
-      <div class="form-group">
-        <label>Composer (Optional)</label>
-        <input type="text" id="composer" placeholder="e.g., Marty Haugen" oninput="generateJSON()" />
-      </div>
-      <div class="form-group">
-        <label>Liturgical Season</label>
-        <select id="season" onchange="generateJSON()">
-          <option value="Current">Current</option>
-          <option value="Advent">Advent</option>
-          <option value="Christmas">Christmas</option>
-          <option value="Lent/Easter">Lent/Easter</option>
-          <option value="Ordinary Time">Ordinary Time</option>
-        </select>
-      </div>
-    </div>
+  <input type="text" id="lineInput" placeholder="Waiting In Silence, Alto Waiting In Silence.mp3, Advent / Christmas" oninput="parseLine()" />
 
-    <div class="form-group">
-      <label>YouTube Link (Optional)</label>
-      <input type="text" id="youtubeUrl" placeholder="https://youtu.be/..." oninput="generateJSON()" />
-    </div>
+  <textarea id="jsonOutput" readonly></textarea>
 
-    <div class="parts-box">
-      <label style="margin-bottom: 8px;">Audio MP3 Filenames (Leave blank if YouTube-only)</label>
-      <div class="grid-2">
-        <input type="text" id="soprano" placeholder="Soprano MP3 filename" oninput="generateJSON()" />
-        <input type="text" id="alto" placeholder="Alto MP3 filename" oninput="generateJSON()" />
-        <input type="text" id="tenor" placeholder="Tenor MP3 filename" oninput="generateJSON()" />
-        <input type="text" id="bass" placeholder="Bass MP3 filename" oninput="generateJSON()" />
-      </div>
-    </div>
+  <script>
+    function parseLine() {
+      const input = document.getElementById('lineInput').value.trim();
+      if (!input) {
+        document.getElementById('jsonOutput').value = '';
+        return;
+      }
 
-    <button type="button" onclick="generateJSON()">Generate JSON Code</button>
+      // Split by comma
+      const parts = input.split(',').map(s => s.trim());
+      const title = parts[0] || '';
+      const target = parts[1] || '';
+      const season = parts[2] || 'Ordinary Time';
 
-    <div class="form-group" style="margin-top: 20px;">
-      <label>Formatted Output (Copy & Paste before closing <code>]</code> in <code>data/tracks.json</code>):</label>
-      <textarea id="jsonOutput" readonly></textarea>
-      <button type="button" class="copy-btn" onclick="copyOutput()">📋 Copy Code to Clipboard</button>
-    </div>
-  </div>
+      const entry = { title: title };
 
-  
-<script>
-  function generateJSON() {
-    const titleInput = document.getElementById('title').value.trim();
-    const composer = document.getElementById('composer').value.trim();
-    const season = document.getElementById('season').value;
-    const youtubeUrl = document.getElementById('youtubeUrl').value.trim();
+      // Route to youtubeUrl if it's a link, otherwise assign to name (MP3)
+      if (target.startsWith('http://') || target.startsWith('https://')) {
+        entry.youtubeUrl = target;
+      } else if (target) {
+        entry.name = target.endsWith('.mp3') ? target : `${target}.mp3`;
+      }
 
-    const soprano = document.getElementById('soprano').value.trim();
-    const alto = document.getElementById('alto').value.trim();
-    const tenor = document.getElementById('tenor').value.trim();
-    const bass = document.getElementById('bass').value.trim();
+      entry.season = season;
+      entry.status = "current";
 
-    if (!titleInput) {
-      document.getElementById('jsonOutput').value = "// Enter a song title above to generate JSON...";
-      return;
+      document.getElementById('jsonOutput').value = ",\n" + JSON.stringify(entry, null, 2);
     }
+  </script>
 
-    const entries = [];
-
-    // Helper to generate MP3 track entry matching your revised schema
-    const addMp3Entry = (fileName) => {
-      if (!fileName) return;
-      const entry = {
-        title: titleInput,
-        name: fileName.endsWith('.mp3') ? fileName : `${fileName}.mp3`,
-        season: season,
-        status: "current"
-      };
-      if (composer) entry.composer = composer;
-      entries.push(entry);
-    };
-
-    addMp3Entry(soprano);
-    addMp3Entry(alto);
-    addMp3Entry(tenor);
-    addMp3Entry(bass);
-
-    // Generate YouTube entry if present
-    if (youtubeUrl) {
-      // Clean title for YouTube entries to include "(Full Recording)" automatically if missing
-      const ytTitle = titleInput.includes('(Full Recording)') 
-        ? titleInput 
-        : `${titleInput} (Full Recording)`;
-
-      const ytEntry = {
-        title: ytTitle,
-        season: season,
-        status: "current",
-        youtubeUrl: youtubeUrl
-      };
-      if (composer) ytEntry.composer = composer;
-      entries.push(ytEntry);
-    }
-
-    // Format output as clean JSON entries ready to paste before closing ]
-    const outputText = ",\n" + entries.map(item => JSON.stringify(item, null, 2)).join(",\n");
-    document.getElementById('jsonOutput').value = outputText;
-  }
-
-  function copyOutput() {
-    const textarea = document.getElementById('jsonOutput');
-    textarea.select();
-    document.execCommand('copy');
-    alert('Copied to clipboard! Paste it right before the final ] bracket in data/tracks.json');
-  }
-
-  generateJSON();
-</script>
 </body>
 </html>
