@@ -121,45 +121,75 @@
       <button type="button" class="copy-btn" onclick="copyOutput()">📋 Copy Code to Clipboard</button>
     </div>
   </div>
+
+  
 <script>
-function generateJSON() {
-  const title = document.getElementById('title').value.trim();
-  const composer = document.getElementById('composer').value.trim();
-  const season = document.getElementById('season').value;
-  const youtubeUrl = document.getElementById('youtubeUrl').value.trim();
+  function generateJSON() {
+    const titleInput = document.getElementById('title').value.trim();
+    const composer = document.getElementById('composer').value.trim();
+    const season = document.getElementById('season').value;
+    const youtubeUrl = document.getElementById('youtubeUrl').value.trim();
 
-  const parts = [
-    document.getElementById('soprano').value.trim(),
-    document.getElementById('alto').value.trim(),
-    document.getElementById('tenor').value.trim(),
-    document.getElementById('bass').value.trim()
-  ].filter(Boolean);
+    const soprano = document.getElementById('soprano').value.trim();
+    const alto = document.getElementById('alto').value.trim();
+    const tenor = document.getElementById('tenor').value.trim();
+    const bass = document.getElementById('bass').value.trim();
 
-  if (!title) {
-    document.getElementById('jsonOutput').value = "// Enter a song title above to generate JSON...";
-    return;
+    if (!titleInput) {
+      document.getElementById('jsonOutput').value = "// Enter a song title above to generate JSON...";
+      return;
+    }
+
+    const entries = [];
+
+    // Helper to generate MP3 track entry matching your revised schema
+    const addMp3Entry = (fileName) => {
+      if (!fileName) return;
+      const entry = {
+        title: titleInput,
+        name: fileName.endsWith('.mp3') ? fileName : `${fileName}.mp3`,
+        season: season,
+        status: "current"
+      };
+      if (composer) entry.composer = composer;
+      entries.push(entry);
+    };
+
+    addMp3Entry(soprano);
+    addMp3Entry(alto);
+    addMp3Entry(tenor);
+    addMp3Entry(bass);
+
+    // Generate YouTube entry if present
+    if (youtubeUrl) {
+      // Clean title for YouTube entries to include "(Full Recording)" automatically if missing
+      const ytTitle = titleInput.includes('(Full Recording)') 
+        ? titleInput 
+        : `${titleInput} (Full Recording)`;
+
+      const ytEntry = {
+        title: ytTitle,
+        season: season,
+        status: "current",
+        youtubeUrl: youtubeUrl
+      };
+      if (composer) ytEntry.composer = composer;
+      entries.push(ytEntry);
+    }
+
+    // Format output as clean JSON entries ready to paste before closing ]
+    const outputText = ",\n" + entries.map(item => JSON.stringify(item, null, 2)).join(",\n");
+    document.getElementById('jsonOutput').value = outputText;
   }
 
-  const entries = [];
-
-  // Generate flat MP3 entries for tracks.json
-  parts.forEach(fileName => {
-    const entry = { title: title, name: fileName, status: "current", season: season };
-    if (composer) entry.composer = composer;
-    entries.push(entry);
-  });
-
-  // Generate YouTube entry if present
-  if (youtubeUrl) {
-    const ytEntry = { title: title, youtubeUrl: youtubeUrl, status: "current", season: season };
-    if (composer) ytEntry.composer = composer;
-    entries.push(ytEntry);
+  function copyOutput() {
+    const textarea = document.getElementById('jsonOutput');
+    textarea.select();
+    document.execCommand('copy');
+    alert('Copied to clipboard! Paste it right before the final ] bracket in data/tracks.json');
   }
 
-  // Format clean JSON output with leading comma
-  const outputText = ",\n" + entries.map(item => JSON.stringify(item, null, 2)).join(",\n");
-  document.getElementById('jsonOutput').value = outputText;
-}
+  generateJSON();
 </script>
 </body>
 </html>
