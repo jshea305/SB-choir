@@ -252,6 +252,12 @@
   { "title": "Song Of Parting, Bass", "name": "Song Of Parting, Bass.mp3", "season": "Ordinary Time", "status": "archived" },
   { "title": "Sop. Gloria-mass Joy Peace", "name": "Sop. Gloria-mass Joy Peace.mp3", "season": "Ordinary Time", "status": "archived" },
   { "title": "Sos", "name": "Sos.mp3", "season": "Ordinary Time", "status": "archived" },
+  {
+    "title": "Star Of Advent (Full Recording)",
+    "season": "Advent / Christmas",
+    "status": "current",
+    "youtubeUrl": "https://youtu.be/h9FjXMET7kQ?si=qGPctUFLJhtQmye8"
+  }
   { "title": "Star Of Advent", "name": "Star Of Advent -alto.mp3", "season": "Advent / Christmas", "status": "current" },
   { "title": "Star Of Advent", "name": "Star Of Advent Bass.mp3", "season": "Advent / Christmas", "status": "current" },
   { "title": "Star Of Advent", "name": "Star Of Advent Tenor.mp3", "season": "Advent / Christmas", "status": "current" },
